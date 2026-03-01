@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+
+<html lang="ku" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MathKu — چارەساری بیرکاری</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060b14;
+  --bg2: #0d1526;
+  --surface: #111d33;
+  --card: #162035;
+  --border: #1e3256;
+  --border2: #253d6b;
+  --accent: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #10b981;
+  --accent4: #f59e0b;
+  --pink: #ec4899;
+  --text: #e2eaff;
+  --text2: #8ba3cc;
+  --muted: #4a6280;
+  --white: #ffffff;
+  --nav-h: 70px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Noto Kufi Arabic’, sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+/* ── BACKGROUND CANVAS ── */
+#bg-canvas {
+position: fixed;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+opacity: 0.5;
+}
+
+/* ── NAVBAR ── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+height: var(–nav-h);
+z-index: 1000;
+background: rgba(6,11,20,0.85);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid var(–border);
+display: flex;
+align-items: center;
+padding: 0 2rem;
+gap: 1rem;
+}
+
+.nav-logo {
+display: flex; align-items: center; gap: 0.75rem;
+text-decoration: none; margin-left: auto;
+}
+.nav-logo-icon {
+width: 38px; height: 38px;
+background: linear-gradient(135deg, var(–accent), var(–accent2));
+border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.2rem; font-weight: 900;
+color: #fff; font-family: ‘JetBrains Mono’, monospace;
+box-shadow: 0 0 20px rgba(0,212,255,0.3);
+}
+.nav-logo-text {
+font-size: 1.3rem; font-weight: 800;
+background: linear-gradient(135deg, var(–accent), var(–accent2));
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+background-clip: text;
+}
+
+.nav-links {
+display: flex; align-items: center; gap: 0.25rem;
+margin-right: auto;
+}
+.nav-link {
+padding: 0.45rem 0.9rem;
+border-radius: 8px;
+font-size: 0.82rem; font-weight: 600;
+color: var(–text2);
+cursor: pointer;
+transition: all 0.2s;
+border: 1px solid transparent;
+white-space: nowrap;
+}
+.nav-link:hover { color: var(–accent); background: rgba(0,212,255,0.07); border-color: var(–border); }
+.nav-link.active { color: var(–accent); background: rgba(0,212,255,0.1); border-color: rgba(0,212,255,0.3); }
+
+.hamburger {
+display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 5px; margin-right: auto;
+}
+.hamburger span { display: block; width: 24px; height: 2px; background: var(–text); border-radius: 2px; transition: all 0.3s; }
+
+.mobile-menu {
+display: none; position: fixed; top: var(–nav-h); left: 0; right: 0;
+background: rgba(6,11,20,0.97); backdrop-filter: blur(20px);
+border-bottom: 1px solid var(–border); z-index: 999; padding: 1rem;
+flex-direction: column; gap: 0.5rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-link {
+padding: 0.75rem 1rem; border-radius: 10px;
+font-size: 0.9rem; font-weight: 600; color: var(–text2);
+cursor: pointer; transition: all 0.2s;
+}
+.mobile-link:hover, .mobile-link.active { color: var(–accent); background: rgba(0,212,255,0.1); }
+
+/* ── MAIN ── */
+main { padding-top: var(–nav-h); position: relative; z-index: 1; }
+
+/* ── HERO / HOME ── */
+#home {
+min-height: calc(100vh - var(–nav-h));
+display: flex; align-items: center; justify-content: center;
+text-align: center; padding: 3rem 1.5rem;
+position: relative;
+}
+
+.hero-glow {
+position: absolute; width: 600px; height: 600px;
+background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%,-50%);
+pointer-events: none;
+}
+
+.hero-inner { max-width: 750px; }
+
+.hero-badge {
+display: inline-flex; align-items: center; gap: 0.5rem;
+padding: 0.4rem 1.1rem;
+background: rgba(0,212,255,0.08);
+border: 1px solid rgba(0,212,255,0.25);
+border-radius: 50px; font-size: 0.82rem; color: var(–accent);
+font-weight: 600; margin-bottom: 1.5rem;
+animation: fadeDown 0.6s ease;
+}
+
+.hero-title {
+font-size: clamp(2.2rem, 6vw, 4rem);
+font-weight: 900; line-height: 1.15;
+margin-bottom: 1.2rem;
+animation: fadeDown 0.7s ease 0.1s both;
+}
+.hero-title span {
+background: linear-gradient(135deg, var(–accent) 0%, var(–accent2) 50%, var(–pink) 100%);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-sub {
+font-size: 1.1rem; color: var(–text2); max-width: 520px; margin: 0 auto 2.5rem;
+line-height: 1.7; font-weight: 400;
+animation: fadeDown 0.7s ease 0.2s both;
+}
+
+.hero-btns {
+display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+animation: fadeDown 0.7s ease 0.3s both;
+}
+
+.btn-primary {
+padding: 0.9rem 2rem;
+background: linear-gradient(135deg, var(–accent), var(–accent2));
+border: none; border-radius: 12px;
+color: #fff; font-family: ‘Noto Kufi Arabic’, sans-serif;
+font-size: 0.95rem; font-weight: 700;
+cursor: pointer; transition: all 0.3s;
+box-shadow: 0 4px 20px rgba(0,212,255,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.45); }
+
+.btn-secondary {
+padding: 0.9rem 2rem;
+background: transparent;
+border: 1.5px solid var(–border2);
+border-radius: 12px; color: var(–text);
+font-family: ‘Noto Kufi Arabic’, sans-serif;
+font-size: 0.95rem; font-weight: 600;
+cursor: pointer; transition: all 0.3s;
+}
+.btn-secondary:hover { border-color: var(–accent); color: var(–accent); background: rgba(0,212,255,0.06); }
+
+/* Cards grid on home */
+.topics-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+gap: 1rem; padding: 1.5rem;
+max-width: 1100px; margin: 0 auto;
+animation: fadeUp 0.8s ease 0.4s both;
+}
+
+.topic-card {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 16px; padding: 1.4rem;
+cursor: pointer; transition: all 0.3s;
+position: relative; overflow: hidden;
+}
+.topic-card::before {
+content: ‘’; position: absolute; inset: 0;
+background: linear-gradient(135deg, var(–tc1, var(–accent)), var(–tc2, var(–accent2)));
+opacity: 0; transition: opacity 0.3s;
+}
+.topic-card:hover { transform: translateY(-4px); border-color: var(–border2); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.topic-card:hover::before { opacity: 0.06; }
+.topic-card:hover .tc-icon { transform: scale(1.1); }
+
+.tc-icon { font-size: 2rem; margin-bottom: 0.75rem; display: block; transition: transform 0.3s; position: relative; z-index: 1; }
+.tc-cat { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.35rem; position: relative; z-index: 1; }
+.tc-title { font-size: 0.92rem; font-weight: 700; color: var(–text); margin-bottom: 0.3rem; position: relative; z-index: 1; }
+.tc-desc { font-size: 0.78rem; color: var(–text2); font-weight: 400; position: relative; z-index: 1; }
+.tc-arrow { position: absolute; bottom: 1rem; left: 1rem; font-size: 1rem; opacity: 0; transition: all 0.3s; }
+.topic-card:hover .tc-arrow { opacity: 1; transform: translateX(-4px); }
+
+/* ── SECTION PAGES ── */
+.section-page {
+display: none; min-height: calc(100vh - var(–nav-h));
+padding: 2rem 1.5rem 4rem;
+max-width: 900px; margin: 0 auto;
+}
+.section-page.active { display: block; animation: fadeUp 0.5s ease; }
+
+.section-page.active-home { display: block; }
+
+.page-header {
+display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+padding-bottom: 1.5rem; border-bottom: 1px solid var(–border);
+}
+.page-icon { font-size: 2.5rem; }
+.page-title-wrap {}
+.page-tag { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.2rem; }
+.page-title { font-size: 1.7rem; font-weight: 900; }
+.back-btn {
+margin-right: auto; padding: 0.5rem 1rem;
+background: transparent; border: 1px solid var(–border);
+border-radius: 8px; color: var(–text2);
+font-family: ‘Noto Kufi Arabic’, sans-serif; font-size: 0.82rem;
+cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem;
+}
+.back-btn:hover { color: var(–accent); border-color: var(–accent); }
+
+/* ── SOLVER CARD ── */
+.solver-card {
+background: var(–card);
+border: 1px solid var(–border);
+border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
+}
+.solver-title { font-size: 1rem; font-weight: 700; color: var(–accent); margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+
+label.field-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(–text2); margin-bottom: 0.4rem; }
+
+input[type=“text”], input[type=“number”], select {
+width: 100%; padding: 0.85rem 1.1rem;
+background: var(–surface); border: 1.5px solid var(–border);
+border-radius: 12px; color: var(–text);
+font-family: ‘JetBrains Mono’, monospace; font-size: 1rem;
+transition: all 0.3s; direction: ltr; text-align: center;
+margin-bottom: 1rem;
+}
+input[type=“text”]:focus, input[type=“number”]:focus, select:focus {
+outline: none; border-color: var(–accent);
+box-shadow: 0 0 0 3px rgba(0,212,255,0.12);
+}
+input::placeholder { color: var(–muted); }
+select { font-family: ‘Noto Kufi Arabic’, sans-serif; direction: rtl; text-align: right; }
+
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.input-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+
+.solve-btn {
+width: 100%; padding: 1rem;
+background: linear-gradient(135deg, var(–accent) 0%, var(–accent2) 100%);
+border: none; border-radius: 13px; color: #fff;
+font-family: ‘Noto Kufi Arabic’, sans-serif;
+font-size: 1.05rem; font-weight: 800;
+cursor: pointer; transition: all 0.3s;
+box-shadow: 0 4px 20px rgba(0,212,255,0.25);
+position: relative; overflow: hidden;
+}
+.solve-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,255,0.4); }
+.solve-btn:active { transform: scale(0.99); }
+.solve-btn::after {
+content: ‘’; position: absolute; inset: 0;
+background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+opacity: 0; transition: opacity 0.3s;
+}
+.solve-btn:hover::after { opacity: 1; }
+
+/* examples row */
+.examples-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.ex-chip {
+padding: 0.3rem 0.8rem; border-radius: 50px;
+background: rgba(0,212,255,0.07); border: 1px solid rgba(0,212,255,0.2);
+color: var(–accent); font-family: ‘JetBrains Mono’, monospace; font-size: 0.78rem;
+cursor: pointer; transition: all 0.2s; direction: ltr;
+}
+.ex-chip:hover { background: rgba(0,212,255,0.15); border-color: var(–accent); }
+
+/* ── RESULT ── */
+.result-wrap { margin-top: 1.5rem; }
+.result-box {
+background: linear-gradient(135deg, rgba(16,185,129,0.06), rgba(0,212,255,0.06));
+border: 1.5px solid rgba(16,185,129,0.25);
+border-radius: 16px; padding: 1.5rem; overflow: hidden;
+}
+.result-header { font-size: 0.82rem; font-weight: 700; color: var(–accent3); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+
+.step-list { display: flex; flex-direction: column; gap: 0; }
+.step-item {
+display: flex; align-items: flex-start; gap: 1rem;
+padding: 0.8rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+animation: stepIn 0.4s ease both;
+}
+.step-item:last-child { border-bottom: none; }
+@keyframes stepIn { from { opacity:0; transform: translateX(15px); } to { opacity:1; transform: translateX(0); } }
+.step-num {
+min-width: 28px; height: 28px;
+background: linear-gradient(135deg, var(–accent), var(–accent2));
+border-radius: 8px; display: flex; align-items: center; justify-content: center;
+font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0;
+font-family: ‘JetBrains Mono’, monospace;
+}
+.step-content { flex: 1; }
+.step-label { font-size: 0.75rem; color: var(–text2); margin-bottom: 0.2rem; font-weight: 600; }
+.step-val { font-family: ‘JetBrains Mono’, monospace; font-size: 0.95rem; color: var(–text); direction: ltr; }
+
+.final-answer {
+margin-top: 1.2rem; padding: 1.1rem 1.5rem;
+background: rgba(16,185,129,0.12); border: 1.5px solid rgba(16,185,129,0.35);
+border-radius: 13px; text-align: center; direction: ltr;
+font-family: ‘JetBrains Mono’, monospace; font-size: 1.35rem; font-weight: 700; color: var(–accent3);
+animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes popIn { from { opacity:0; transform: scale(0.9); } to { opacity:1; transform: scale(1); } }
+
+.error-box {
+padding: 1rem; background: rgba(239,68,68,0.1);
+border: 1px solid rgba(239,68,68,0.3); border-radius: 12px;
+color: #fca5a5; font-size: 0.9rem; text-align: center;
+}
+
+/* Matrix Grid */
+.matrix-grid {
+display: inline-grid; gap: 0.4rem;
+padding: 1rem 1.2rem;
+background: var(–surface); border: 1px solid var(–border); border-radius: 12px;
+direction: ltr; margin: 0.5rem 0;
+}
+.matrix-grid input {
+width: 60px; margin: 0; padding: 0.5rem; font-size: 0.9rem;
+text-align: center;
+}
+
+.matrix-section { margin-bottom: 1rem; }
+.matrix-label { font-size: 0.85rem; font-weight: 700; color: var(–accent2); margin-bottom: 0.5rem; }
+
+.size-selector { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.size-btn {
+padding: 0.35rem 0.9rem; border-radius: 8px;
+background: var(–surface); border: 1px solid var(–border);
+color: var(–text2); font-size: 0.82rem; cursor: pointer; transition: all 0.2s;
+}
+.size-btn.active { background: rgba(0,212,255,0.12); border-color: var(–accent); color: var(–accent); }
+
+.matrix-result-grid {
+display: inline-grid; gap: 0.4rem;
+padding: 0.8rem 1rem; background: rgba(16,185,129,0.08);
+border: 1px solid rgba(16,185,129,0.2); border-radius: 10px;
+direction: ltr;
+}
+.mrc { padding: 0.4rem 0.8rem; font-family: ‘JetBrains Mono’, monospace; font-size: 0.95rem; color: var(–accent3); text-align: center; font-weight: 700; }
+
+/* Binary result table */
+.bin-table { width: 100%; border-collapse: collapse; direction: ltr; font-family: ‘JetBrains Mono’, monospace; }
+.bin-table th, .bin-table td { padding: 0.6rem 0.8rem; text-align: center; border: 1px solid var(–border); font-size: 0.88rem; }
+.bin-table th { background: rgba(0,212,255,0.1); color: var(–accent); font-size: 0.78rem; }
+.bin-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+/* ── HOME PAGE ── */
+#home-page { display: block; }
+.home-hero { text-align: center; padding: 3rem 1.5rem 2rem; }
+.home-hero .hero-glow { pointer-events: none; }
+
+/* ── INFO BOX ── */
+.info-box {
+background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25);
+border-radius: 13px; padding: 1rem 1.2rem; margin-bottom: 1rem;
+font-size: 0.88rem; color: var(–text2); line-height: 1.7;
+}
+.info-box strong { color: var(–accent2); }
+
+/* ANIMATIONS */
+@keyframes fadeDown { from { opacity:0; transform: translateY(-15px); } to { opacity:1; transform: translateY(0); } }
+@keyframes fadeUp { from { opacity:0; transform: translateY(15px); } to { opacity:1; transform: translateY(0); } }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+.nav-links { display: none; }
+.hamburger { display: flex; }
+.input-row { grid-template-columns: 1fr; }
+.input-row3 { grid-template-columns: 1fr 1fr; }
+.topics-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; padding: 1rem; }
+.hero-title { font-size: 1.9rem; }
+.section-page { padding: 1.5rem 1rem 3rem; }
+}
+@media (max-width: 480px) {
+nav { padding: 0 1rem; }
+.input-row3 { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAVBAR -->
+
+<nav>
+  <a class="nav-logo" onclick="showHome()" style="cursor:pointer; text-decoration:none;">
+    <div class="nav-logo-icon">∑</div>
+    <span class="nav-logo-text">AMZ MATHS</span>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <div class="nav-link active" onclick="showHome()">🏠 سەرەکی</div>
+    <div class="nav-link" onclick="showSection('linear')">خەتی</div>
+    <div class="nav-link" onclick="showSection('quadratic')">دووەم</div>
+    <div class="nav-link" onclick="showSection('matrix-add')">ماتریکس</div>
+    <div class="nav-link" onclick="showSection('binary')">باینەری</div>
+    <div class="nav-link" onclick="showSection('prime')">پرایم</div>
+    <div class="nav-link" onclick="showSection('calculus')">کالکولوس</div>
+    <div class="nav-link" onclick="showSection('combinatorics')">🎲 ترکیبیات</div>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-link active" onclick="showHome();closeMenu()">🏠 سەرەکی</div>
+  <div class="mobile-link" onclick="showSection('linear');closeMenu()">📐 Linear Equations</div>
+  <div class="mobile-link" onclick="showSection('quadratic');closeMenu()">📈 Quadratic Equations</div>
+  <div class="mobile-link" onclick="showSection('matrix-add');closeMenu()">🧮 Matrix Addition</div>
+  <div class="mobile-link" onclick="showSection('matrix-sub');closeMenu()">➖ Matrix Subtraction</div>
+  <div class="mobile-link" onclick="showSection('matrix-mul');closeMenu()">✖️ Matrix Multiplication</div>
+  <div class="mobile-link" onclick="showSection('binary');closeMenu()">💻 Binary Ops</div>
+  <div class="mobile-link" onclick="showSection('prime');closeMenu()">🔢 Prime Factorization</div>
+  <div class="mobile-link" onclick="showSection('calculus');closeMenu()">∫ Calculus</div>
+  <div class="mobile-link" onclick="showSection('combinatorics');closeMenu()">🎲 Factorial, Permutations & Combinations</div>
+</div>
+
+<main>
+
+<!-- ======= HOME PAGE ======= -->
+
+<div id="home-page">
+  <div style="text-align:center; padding: 4rem 1.5rem 2rem; position:relative;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:500px;height:500px;background:radial-gradient(circle,rgba(0,212,255,0.07) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+    <div class="hero-badge" style="display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1.1rem;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.25);border-radius:50px;font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:1.5rem;animation:fadeDown .6s ease;">
+      ✨ بیرکاری بە شێوازێکی تازە
+    </div>
+    <h1 style="font-size:clamp(2rem,6vw,3.8rem);font-weight:900;line-height:1.15;margin-bottom:1.2rem;animation:fadeDown .7s ease .1s both;">
+      چارەساری هاوکیشە<br>
+      <span style="background:linear-gradient(135deg,var(--accent) 0%,var(--accent2) 50%,var(--pink) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">بە هەنگاو — هەنگاو</span>
+    </h1>
+    <p style="font-size:1.05rem;color:var(--text2);max-width:500px;margin:0 auto 2.5rem;line-height:1.7;font-weight:400;animation:fadeDown .7s ease .2s both;">
+       <\p> Created By: AMZ GROUP (Mohammed Barzan,Zhalla Karwan,Anas Muhsin)هاوکیشەکەت بنووسە، وەڵامی تەواو بە هەنگاوەکانی بدەتەوە — بیرکاری هیچکات ئەوەندە ئاسان نەبوو
+    </p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeDown .7s ease .3s both;">
+      <button class="btn-primary" onclick="document.getElementById('topics-section').scrollIntoView({behavior:'smooth'})">🚀 دەستبکە</button>
+      <button class="btn-secondary" onclick="showSection('linear')">نموونەی ببینە</button>
+    </div>
+  </div>
+
+  <div id="topics-section" style="padding: 1rem 0 3rem;">
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:.4rem;">بابەتەکان</h2>
+      <p style="color:var(--text2);font-size:.9rem;">بابەتێک هەڵبژێرە</p>
+    </div>
+    <div class="topics-grid">
+      <!-- Algebra -->
+      <div class="topic-card" onclick="showSection('linear')" style="--tc1:#00d4ff;--tc2:#0891b2;">
+        <span class="tc-icon">📐</span>
+        <div class="tc-cat" style="color:#00d4ff;">Linear</div>
+        <div class="tc-title">هاوکیشەی خەتی</div>
+        <div class="tc-desc">دوو نەزانراو، دوو هاوکیشە</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <div class="topic-card" onclick="showSection('quadratic')" style="--tc1:#7c3aed;--tc2:#4f46e5;">
+        <span class="tc-icon">📈</span>
+        <div class="tc-cat" style="color:#a78bfa;">Quadratic</div>
+        <div class="tc-title">هاوکیشەی دووەم</div>
+        <div class="tc-desc">Quadratic — ax² + bx + c = 0</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <!-- Matrix -->
+      <div class="topic-card" onclick="showSection('matrix-add')" style="--tc1:#f59e0b;--tc2:#d97706;">
+        <span class="tc-icon">➕</span>
+        <div class="tc-cat" style="color:#fbbf24;">ماتریکس</div>
+        <div class="tc-title">زیادکردنی ماتریکس</div>
+        <div class="tc-desc">Matrix Addition — 2×2, 3×3...</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <div class="topic-card" onclick="showSection('matrix-sub')" style="--tc1:#ef4444;--tc2:#dc2626;">
+        <span class="tc-icon">➖</span>
+        <div class="tc-cat" style="color:#f87171;">ماتریکس</div>
+        <div class="tc-title">کەمکردنەوەی ماتریکس</div>
+        <div class="tc-desc">Matrix Subtraction — 2×2, 3×3...</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <div class="topic-card" onclick="showSection('matrix-mul')" style="--tc1:#10b981;--tc2:#059669;">
+        <span class="tc-icon">✖️</span>
+        <div class="tc-cat" style="color:#34d399;">ماتریکس</div>
+        <div class="tc-title">لێکدانەوەی ماتریکس</div>
+        <div class="tc-desc">Matrix Multiplication — 2×2, 3×3...</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <!-- Binary -->
+      <div class="topic-card" onclick="showSection('binary')" style="--tc1:#06b6d4;--tc2:#0e7490;">
+        <span class="tc-icon">💻</span>
+        <div class="tc-cat" style="color:#22d3ee;">باینەری</div>
+        <div class="tc-title">گۆڕانی باینەری</div>
+        <div class="tc-desc">Binary ↔ Decimal</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <div class="topic-card" onclick="showSection('binary-arith')" style="--tc1:#8b5cf6;--tc2:#7c3aed;">
+        <span class="tc-icon">🔢</span>
+        <div class="tc-cat" style="color:#a78bfa;">باینەری</div>
+        <div class="tc-title">مەتماتیکی باینەری</div>
+        <div class="tc-desc">+, −, ×, ÷ بە باینەری</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <!-- Prime -->
+      <div class="topic-card" onclick="showSection('prime')" style="--tc1:#f59e0b;--tc2:#b45309;">
+        <span class="tc-icon">🔑</span>
+        <div class="tc-cat" style="color:#fcd34d;">ژمارە</div>
+        <div class="tc-title">لق لقکردنی پرایم</div>
+        <div class="tc-desc">Prime Factorization</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <!-- Calculus -->
+      <div class="topic-card" onclick="showSection('calculus')" style="--tc1:#ec4899;--tc2:#be185d;">
+        <span class="tc-icon">∫</span>
+        <div class="tc-cat" style="color:#f472b6;">کالکولوس</div>
+        <div class="tc-title">Derivatives & Integrals</div>
+        <div class="tc-desc">ڕووناککردنی ئەساسییەکان</div>
+        <div class="tc-arrow">→</div>
+      </div>
+      <!-- Combinatorics -->
+      <div class="topic-card" onclick="showSection('combinatorics')" style="--tc1:#f97316;--tc2:#ea580c;">
+        <span class="tc-icon">🎲</span>
+        <div class="tc-cat" style="color:#fb923c;">ترکیبیات</div>
+        <div class="tc-title">Factorial, Permutation & Combination</div>
+        <div class="tc-desc">n!, P(n,r), C(n,r) — هەنگاو بە هەنگاو</div>
+        <div class="tc-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======= SECTION PAGES ======= -->
+
+<!-- ── LINEAR ── -->
+
+<div class="section-page" id="sec-linear">
+  <div class="page-header">
+    <span class="page-icon">📐</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:var(--accent);">ئالجەبرا</div>
+      <div class="page-title">هاوکیشەی خەتی بە دوو نەزانراو</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="info-box">
+    <strong>فورموڵ:</strong> سیستەمی هاوکیشەی خەتی بە شێوەی <strong>ax + by = c</strong> دەبێت. بنووسە ئەگینە: <code style="font-family:monospace;color:var(--accent);">2x + y = 1</code>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">✏️ هاوکیشەکانت بنووسە</div>
+    <label class="field-label">هاوکیشەی یەکەم</label>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('lin1').value=this.textContent">2x + y = 1</span>
+      <span class="ex-chip" onclick="document.getElementById('lin1').value=this.textContent">3x - 2y = 4</span>
+      <span class="ex-chip" onclick="document.getElementById('lin1').value=this.textContent">x + 2y = 7</span>
+    </div>
+    <input type="text" id="lin1" placeholder="2x + y = 1">
+    <label class="field-label">هاوکیشەی دووەم</label>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('lin2').value=this.textContent">3x - 2y = 4</span>
+      <span class="ex-chip" onclick="document.getElementById('lin2').value=this.textContent">x - y = 1</span>
+      <span class="ex-chip" onclick="document.getElementById('lin2').value=this.textContent">2x - y = 3</span>
+    </div>
+    <input type="text" id="lin2" placeholder="3x - 2y = 4">
+    <button class="solve-btn" onclick="solveLinear()">⚡ چارەسەر بکە</button>
+    <div id="lin-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── QUADRATIC ── -->
+
+<div class="section-page" id="sec-quadratic">
+  <div class="page-header">
+    <span class="page-icon">📈</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:var(--accent2);">ئالجەبرا</div>
+      <div class="page-title">هاوکیشەی دووەم (Quadratic)</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="info-box">
+    <strong>فورموڵ:</strong> ax² + bx + c = 0 &nbsp;|&nbsp;
+    x = (−b ± √(b²−4ac)) / 2a &nbsp;|&nbsp; Δ = b²−4ac
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">✏️ هاوکیشەکەت بنووسە</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('quad-eq').value=this.textContent">x^2 - 5x + 6 = 0</span>
+      <span class="ex-chip" onclick="document.getElementById('quad-eq').value=this.textContent">2x^2 + 3x - 2 = 0</span>
+      <span class="ex-chip" onclick="document.getElementById('quad-eq').value=this.textContent">x^2 - 4 = 0</span>
+      <span class="ex-chip" onclick="document.getElementById('quad-eq').value=this.textContent">x^2 + 2x + 1 = 0</span>
+    </div>
+    <input type="text" id="quad-eq" placeholder="x^2 - 5x + 6 = 0">
+    <button class="solve-btn" onclick="solveQuadratic()">⚡ چارەسەر بکە</button>
+    <div id="quad-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── MATRIX ADD ── -->
+
+<div class="section-page" id="sec-matrix-add">
+  <div class="page-header">
+    <span class="page-icon">➕</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:var(--accent4);">ماتریس</div>
+      <div class="page-title">زیادکردنی ماتریس</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">📏 قەبارەی ماتریس</div>
+    <div class="size-selector" id="madd-sizes">
+      <button class="size-btn active" onclick="setMatrixSize('madd',2,this)">2×2</button>
+      <button class="size-btn" onclick="setMatrixSize('madd',3,this)">3×3</button>
+      <button class="size-btn" onclick="setMatrixSize('madd',4,this)">4×4</button>
+    </div>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
+      <div class="matrix-section"><div class="matrix-label">ماتریس A</div><div id="madd-A" class="matrix-grid"></div></div>
+      <div style="font-size:2rem;color:var(--accent4);padding-top:2.5rem;font-weight:900;">+</div>
+      <div class="matrix-section"><div class="matrix-label">ماتریس B</div><div id="madd-B" class="matrix-grid"></div></div>
+    </div>
+    <button class="solve-btn" style="margin-top:1.2rem;" onclick="solveMatrix('add')">⚡ زیاد بکە</button>
+    <div id="madd-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── MATRIX SUB ── -->
+
+<div class="section-page" id="sec-matrix-sub">
+  <div class="page-header">
+    <span class="page-icon">➖</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:#ef4444;">ماتریس</div>
+      <div class="page-title">کەمکردنەوەی ماتریس</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">📏 قەبارەی ماتریس</div>
+    <div class="size-selector" id="msub-sizes">
+      <button class="size-btn active" onclick="setMatrixSize('msub',2,this)">2×2</button>
+      <button class="size-btn" onclick="setMatrixSize('msub',3,this)">3×3</button>
+      <button class="size-btn" onclick="setMatrixSize('msub',4,this)">4×4</button>
+    </div>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
+      <div class="matrix-section"><div class="matrix-label">ماتریس A</div><div id="msub-A" class="matrix-grid"></div></div>
+      <div style="font-size:2rem;color:#ef4444;padding-top:2.5rem;font-weight:900;">−</div>
+      <div class="matrix-section"><div class="matrix-label">ماتریس B</div><div id="msub-B" class="matrix-grid"></div></div>
+    </div>
+    <button class="solve-btn" style="margin-top:1.2rem;" onclick="solveMatrix('sub')">⚡ کەمبکەوە</button>
+    <div id="msub-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── MATRIX MUL ── -->
+
+<div class="section-page" id="sec-matrix-mul">
+  <div class="page-header">
+    <span class="page-icon">✖️</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:var(--accent3);">ماتریس</div>
+      <div class="page-title">لێکدانەوەی ماتریس</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">📏 قەبارەی ماتریس</div>
+    <div class="size-selector" id="mmul-sizes">
+      <button class="size-btn active" onclick="setMatrixSize('mmul',2,this)">2×2</button>
+      <button class="size-btn" onclick="setMatrixSize('mmul',3,this)">3×3</button>
+    </div>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;">
+      <div class="matrix-section"><div class="matrix-label">ماتریس A</div><div id="mmul-A" class="matrix-grid"></div></div>
+      <div style="font-size:2rem;color:var(--accent3);padding-top:2.5rem;font-weight:900;">×</div>
+      <div class="matrix-section"><div class="matrix-label">ماتریس B</div><div id="mmul-B" class="matrix-grid"></div></div>
+    </div>
+    <button class="solve-btn" style="margin-top:1.2rem;" onclick="solveMatrix('mul')">⚡ لێکبدەوە</button>
+    <div id="mmul-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── BINARY CONVERSION ── -->
+
+<div class="section-page" id="sec-binary">
+  <div class="page-header">
+    <span class="page-icon">💻</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:#22d3ee;">باینەری</div>
+      <div class="page-title">گۆڕانی باینەری ↔ دەسیمال</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+
+  <!-- Binary to Decimal -->
+
+  <div class="solver-card">
+    <div class="solver-title">🔄 Binary → Decimal</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('b2d-in').value=this.textContent">1010</span>
+      <span class="ex-chip" onclick="document.getElementById('b2d-in').value=this.textContent">11011</span>
+      <span class="ex-chip" onclick="document.getElementById('b2d-in').value=this.textContent">101010</span>
+    </div>
+    <input type="text" id="b2d-in" placeholder="1010">
+    <button class="solve-btn" onclick="binToDec()">⚡ گۆڕانەوە</button>
+    <div id="b2d-result" class="result-wrap"></div>
+  </div>
+
+  <!-- Decimal to Binary -->
+
+  <div class="solver-card">
+    <div class="solver-title">🔄 Decimal → Binary</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('d2b-in').value=this.textContent">42</span>
+      <span class="ex-chip" onclick="document.getElementById('d2b-in').value=this.textContent">255</span>
+      <span class="ex-chip" onclick="document.getElementById('d2b-in').value=this.textContent">128</span>
+    </div>
+    <input type="text" id="d2b-in" placeholder="42">
+    <button class="solve-btn" onclick="decToBin()">⚡ گۆڕانەوە</button>
+    <div id="d2b-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── BINARY ARITHMETIC ── -->
+
+<div class="section-page" id="sec-binary-arith">
+  <div class="page-header">
+    <span class="page-icon">🔢</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:#a78bfa;">باینەری</div>
+      <div class="page-title">مەتماتیکی باینەری</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">✏️ دوو ژمارەی باینەری بنووسە</div>
+    <div class="input-row">
+      <div>
+        <label class="field-label">ژمارەی یەکەم (Binary)</label>
+        <input type="text" id="bin-a" placeholder="1010">
+      </div>
+      <div>
+        <label class="field-label">ژمارەی دووەم (Binary)</label>
+        <input type="text" id="bin-b" placeholder="0110">
+      </div>
+    </div>
+    <label class="field-label">جۆری مەتماتیک</label>
+    <select id="bin-op">
+      <option value="add">زیادکردن (+)</option>
+      <option value="sub">کەمکردنەوە (−)</option>
+      <option value="mul">لێکدانەوە (×)</option>
+      <option value="div">دابەشکردن (÷)</option>
+    </select>
+    <button class="solve-btn" onclick="binaryArith()">⚡ چارەسەر بکە</button>
+    <div id="bin-arith-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── PRIME FACTORIZATION ── -->
+
+<div class="section-page" id="sec-prime">
+  <div class="page-header">
+    <span class="page-icon">🔑</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:#fcd34d;">ژمارە</div>
+      <div class="page-title">لق لقکردنی پرایم</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+  <div class="solver-card">
+    <div class="solver-title">✏️ ژمارەکەت بنووسە</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('prime-in').value=this.textContent">60</span>
+      <span class="ex-chip" onclick="document.getElementById('prime-in').value=this.textContent">360</span>
+      <span class="ex-chip" onclick="document.getElementById('prime-in').value=this.textContent">2024</span>
+      <span class="ex-chip" onclick="document.getElementById('prime-in').value=this.textContent">1260</span>
+    </div>
+    <input type="text" id="prime-in" placeholder="360">
+    <button class="solve-btn" onclick="primeFactorize()">⚡ لق لق بکە</button>
+    <div id="prime-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── CALCULUS ── -->
+
+<div class="section-page" id="sec-calculus">
+  <div class="page-header">
+    <span class="page-icon">∫</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:var(--pink);">کالکولوس</div>
+      <div class="page-title">Derivatives & Integrals</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+
+  <div class="solver-card">
+    <div class="solver-title">📉 Derivative — دیریڤاتیڤ (d/dx)</div>
+    <div class="info-box" style="margin-bottom:1rem;"><strong>دەستووری بنچینەیی:</strong> d/dx[xⁿ] = n·xⁿ⁻¹ &nbsp;|&nbsp; d/dx[c] = 0 &nbsp;|&nbsp; d/dx[eˣ] = eˣ &nbsp;|&nbsp; d/dx[sin x] = cos x &nbsp;|&nbsp; d/dx[cos x] = −sin x &nbsp;|&nbsp; d/dx[ln x] = 1/x</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">x^3</span>
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">3x^2 + 2x + 5</span>
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">sin(x)</span>
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">e^x</span>
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">ln(x)</span>
+      <span class="ex-chip" onclick="document.getElementById('deriv-in').value=this.textContent">cos(x)</span>
+    </div>
+    <input type="text" id="deriv-in" placeholder="3x^2 + 2x + 5">
+    <button class="solve-btn" onclick="solveDerivative()">⚡ دیریڤاتیڤ بدۆزەوە</button>
+    <div id="deriv-result" class="result-wrap"></div>
+  </div>
+
+  <div class="solver-card">
+    <div class="solver-title">∫ Integral — ئینتیگرال</div>
+    <div class="info-box" style="margin-bottom:1rem;"><strong>دەستووری بنچینەیی:</strong> ∫xⁿ dx = xⁿ⁺¹/(n+1) + C &nbsp;|&nbsp; ∫eˣ dx = eˣ + C &nbsp;|&nbsp; ∫sin x dx = −cos x + C &nbsp;|&nbsp; ∫cos x dx = sin x + C &nbsp;|&nbsp; ∫(1/x) dx = ln|x| + C</div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">x^2</span>
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">3x^2 + 2x</span>
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">sin(x)</span>
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">e^x</span>
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">cos(x)</span>
+      <span class="ex-chip" onclick="document.getElementById('integ-in').value=this.textContent">1/x</span>
+    </div>
+    <input type="text" id="integ-in" placeholder="x^2">
+    <button class="solve-btn" onclick="solveIntegral()">⚡ ئینتیگرال بدۆزەوە</button>
+    <div id="integ-result" class="result-wrap"></div>
+  </div>
+</div>
+
+<!-- ── COMBINATORICS ── -->
+
+<div class="section-page" id="sec-combinatorics">
+  <div class="page-header">
+    <span class="page-icon">🎲</span>
+    <div class="page-title-wrap">
+      <div class="page-tag" style="color:#fb923c;">ترکیبیات</div>
+      <div class="page-title">Factorial, Permutations & Combinations</div>
+    </div>
+    <button class="back-btn" onclick="showHome()">← گەڕانەوە</button>
+  </div>
+
+  <!-- FACTORIAL -->
+
+  <div class="solver-card">
+    <div class="solver-title">❗ Factorial — فاکتۆریەل (n!)</div>
+    <div class="info-box">
+      <strong>پێناسە:</strong> n! = n × (n−1) × (n−2) × ... × 2 × 1 &nbsp;|&nbsp; 0! = 1 &nbsp;|&nbsp; 1! = 1<br>
+      <strong>نموونە:</strong> 5! = 5 × 4 × 3 × 2 × 1 = 120
+    </div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="document.getElementById('fact-n').value=this.textContent">5</span>
+      <span class="ex-chip" onclick="document.getElementById('fact-n').value=this.textContent">7</span>
+      <span class="ex-chip" onclick="document.getElementById('fact-n').value=this.textContent">10</span>
+      <span class="ex-chip" onclick="document.getElementById('fact-n').value=this.textContent">12</span>
+    </div>
+    <label class="field-label">n — ژمارە بنووسە</label>
+    <input type="text" id="fact-n" placeholder="5" style="max-width:200px;">
+    <button class="solve-btn" onclick="solveFactorial()">⚡ فاکتۆریەل بدۆزەوە</button>
+    <div id="fact-result" class="result-wrap"></div>
+  </div>
+
+  <!-- PERMUTATION -->
+
+  <div class="solver-card">
+    <div class="solver-title">🔀 Permutation — ڕیزبەندی P(n, r)</div>
+    <div class="info-box">
+      <strong>فورموڵ:</strong> P(n, r) = n! / (n − r)! &nbsp;|&nbsp; ڕیزبەندی r لەناو n بە ئەو شێوەیەی ئۆردەر گرینگە<br>
+      <strong>نموونە:</strong> P(5, 2) = 5! / 3! = 20
+    </div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="setPermEx(5,2)">P(5,2)</span>
+      <span class="ex-chip" onclick="setPermEx(6,3)">P(6,3)</span>
+      <span class="ex-chip" onclick="setPermEx(8,4)">P(8,4)</span>
+      <span class="ex-chip" onclick="setPermEx(10,3)">P(10,3)</span>
+    </div>
+    <div class="input-row">
+      <div>
+        <label class="field-label">n — کۆی ئەندامەکان</label>
+        <input type="text" id="perm-n" placeholder="5">
+      </div>
+      <div>
+        <label class="field-label">r — چەند هەڵبژێردرێت</label>
+        <input type="text" id="perm-r" placeholder="2">
+      </div>
+    </div>
+    <button class="solve-btn" onclick="solvePermutation()">⚡ Permutation بدۆزەوە</button>
+    <div id="perm-result" class="result-wrap"></div>
+  </div>
+
+  <!-- COMBINATION -->
+
+  <div class="solver-card">
+    <div class="solver-title">🤝 Combination — تەرکیب C(n, r)</div>
+    <div class="info-box">
+      <strong>فورموڵ:</strong> C(n, r) = n! / (r! × (n − r)!) &nbsp;|&nbsp; هەڵبژاردنی r لەناو n بە ئەو شێوەیەی ئۆردەر گرینگ نییە<br>
+      <strong>نموونە:</strong> C(5, 2) = 5! / (2! × 3!) = 10
+    </div>
+    <div class="examples-row">
+      <span class="ex-chip" onclick="setCombEx(5,2)">C(5,2)</span>
+      <span class="ex-chip" onclick="setCombEx(6,3)">C(6,3)</span>
+      <span class="ex-chip" onclick="setCombEx(8,4)">C(8,4)</span>
+      <span class="ex-chip" onclick="setCombEx(10,5)">C(10,5)</span>
+    </div>
+    <div class="input-row">
+      <div>
+        <label class="field-label">n — کۆی ئەندامەکان</label>
+        <input type="text" id="comb-n" placeholder="5">
+      </div>
+      <div>
+        <label class="field-label">r — چەند هەڵبژێردرێت</label>
+        <input type="text" id="comb-r" placeholder="2">
+      </div>
+    </div>
+    <button class="solve-btn" onclick="solveCombination()">⚡ Combination بدۆزەوە</button>
+    <div id="comb-result" class="result-wrap"></div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+
+  <div class="solver-card">
+    <div class="solver-title">📊 بەراوردکردنی سێیەکان لەکاتێکدا</div>
+    <div class="input-row">
+      <div>
+        <label class="field-label">n</label>
+        <input type="text" id="comp-n" placeholder="5">
+      </div>
+      <div>
+        <label class="field-label">r</label>
+        <input type="text" id="comp-r" placeholder="2">
+      </div>
+    </div>
+    <button class="solve-btn" onclick="solveAll()">⚡ هەموویان لەکاتێکدا</button>
+    <div id="comp-result" class="result-wrap"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+/* =========== BG ANIMATION =========== */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+function resizeCanvas() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+
+for (let i = 0; i < 60; i++) {
+  particles.push({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-0.5)*0.3, vy: (Math.random()-0.5)*0.3,
+    r: Math.random()*1.5+0.5,
+    alpha: Math.random()*0.4+0.1,
+    color: ['#00d4ff','#7c3aed','#10b981','#f59e0b'][Math.floor(Math.random()*4)]
+  });
+}
+function animBg() {
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p => {
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha; ctx.fill();
+  });
+  ctx.globalAlpha = 1;
+  // Draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i+1; j < particles.length; j++) {
+      let dx = particles[i].x - particles[j].x;
+      let dy = particles[i].y - particles[j].y;
+      let dist = Math.sqrt(dx*dx+dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = '#00d4ff';
+        ctx.globalAlpha = (1 - dist/100) * 0.08;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+    }
+  }
+  requestAnimationFrame(animBg);
+}
+animBg();
+
+/* =========== NAVIGATION =========== */
+let currentSection = null;
+
+function showHome() {
+  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('home-page').style.display = 'block';
+  currentSection = null;
+  updateNavActive('home');
+}
+
+function showSection(id) {
+  document.getElementById('home-page').style.display = 'none';
+  document.querySelectorAll('.section-page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('sec-'+id);
+  if (el) { el.classList.add('active'); el.scrollIntoView({block:'start'}); }
+  currentSection = id;
+  updateNavActive(id);
+  // Init matrices
+  if (id === 'matrix-add') { buildMatrixGrid('madd', 2); }
+  if (id === 'matrix-sub') { buildMatrixGrid('msub', 2); }
+  if (id === 'matrix-mul') { buildMatrixGrid('mmul', 2); }
+}
+
+function updateNavActive(id) {
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const map = {'home':0,'linear':1,'quadratic':2,'matrix-add':3,'matrix-sub':3,'matrix-mul':3,'binary':4,'binary-arith':4,'prime':5,'calculus':6,'combinatorics':7};
+  const links = document.querySelectorAll('.nav-link');
+  if (id === 'home') links[0].classList.add('active');
+  else if (map[id] !== undefined) links[map[id]].classList.add('active');
+}
+
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+function closeMenu() {
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+/* =========== HELPERS =========== */
+function fmt(n) {
+  if (typeof n !== 'number') return n;
+  if (!isFinite(n)) return '∞';
+  if (Math.abs(n - Math.round(n)) < 1e-9) return String(Math.round(n));
+  return parseFloat(n.toFixed(4)).toString();
+}
+
+function buildSteps(steps, answer, resultId) {
+  let stepsHtml = steps.map((s, i) => `
+    <div class="step-item" style="animation-delay:${i*0.08}s">
+      <div class="step-num">${i+1}</div>
+      <div class="step-content">
+        <div class="step-label">${s.label}</div>
+        <div class="step-val">${s.val}</div>
+      </div>
+    </div>`).join('');
+  let html = `<div class="result-box">
+    <div class="result-header">✅ هەنگاوەکانی چارەسەر</div>
+    <div class="step-list">${stepsHtml}</div>
+    ${answer ? `<div class="final-answer">${answer}</div>` : ''}
+  </div>`;
+  document.getElementById(resultId).innerHTML = html;
+}
+
+function showError(msg, resultId) {
+  document.getElementById(resultId).innerHTML = `<div class="error-box">⚠️ ${msg}</div>`;
+}
+
+/* =========== LINEAR SYSTEM =========== */
+function parseLinearEq(eq) {
+  eq = eq.replace(/\s/g,'').replace(/−/g,'-');
+  let parts = eq.split('=');
+  if (parts.length !== 2) return null;
+  let left = parts[0], rhs = parseFloat(parts[1]);
+  if (isNaN(rhs)) return null;
+  let a=0, b=0, c=0;
+  // Parse x coefficient
+  let mx = left.match(/([+\-]?[0-9]*\.?[0-9]*)x/);
+  if (mx) { let s=mx[1]; a=(s===''||s==='+')?1:(s==='-'?-1:parseFloat(s)); }
+  // Parse y coefficient
+  let my = left.match(/([+\-]?[0-9]*\.?[0-9]*)y/);
+  if (my) { let s=my[1]; b=(s===''||s==='+')?1:(s==='-'?-1:parseFloat(s)); }
+  // Parse z coefficient
+  let mz = left.match(/([+\-]?[0-9]*\.?[0-9]*)z/);
+  if (mz) { let s=mz[1]; c=(s===''||s==='+')?1:(s==='-'?-1:parseFloat(s)); }
+  return { a, b, c, rhs };
+}
+
+function solveLinear() {
+  let e1 = parseLinearEq(document.getElementById('lin1').value.trim());
+  let e2 = parseLinearEq(document.getElementById('lin2').value.trim());
+  if (!e1 || !e2) return showError('هاوکیشەکانت دروست بنووسە — نموونە: 2x + y = 5', 'lin-result');
+  let det = e1.a*e2.b - e2.a*e1.b;
+  if (Math.abs(det) < 1e-10) return showError('سیستەمەکە وەڵامی یەکتا نیە (det = 0)', 'lin-result');
+  let x = (e1.rhs*e2.b - e2.rhs*e1.b) / det;
+  let y = (e1.a*e2.rhs - e2.a*e1.rhs) / det;
+  buildSteps([
+    {label:'هاوکیشەی یەکەم', val:`${document.getElementById('lin1').value.trim()}`},
+    {label:'هاوکیشەی دووەم', val:`${document.getElementById('lin2').value.trim()}`},
+    {label:'Determinant (det)', val:`det = (${fmt(e1.a)})(${fmt(e2.b)}) − (${fmt(e2.a)})(${fmt(e1.b)}) = ${fmt(det)}`},
+    {label:'x — بە دەستووری Cramer', val:`x = [(${fmt(e1.rhs)})(${fmt(e2.b)}) − (${fmt(e2.rhs)})(${fmt(e1.b)})] / ${fmt(det)} = ${fmt(x)}`},
+    {label:'y — بە دەستووری Cramer', val:`y = [(${fmt(e1.a)})(${fmt(e2.rhs)}) − (${fmt(e2.a)})(${fmt(e1.rhs)})] / ${fmt(det)} = ${fmt(y)}`},
+    {label:'پشتکراوەکردن', val:`هاوکیشەی ١: ${fmt(e1.a)}(${fmt(x)}) + ${fmt(e1.b)}(${fmt(y)}) = ${fmt(e1.a*x + e1.b*y)} ✓`}
+  ], `x = ${fmt(x)},  y = ${fmt(y)}`, 'lin-result');
+}
+
+/* =========== QUADRATIC =========== */
+function solveQuadratic() {
+  let eq = document.getElementById('quad-eq').value.trim();
+  let parts = eq.split('=');
+  if (parts.length !== 2) return showError('دەبێت هاوکیشەکە = تێدا بێت', 'quad-result');
+  let expr = parts[0].replace(/\s/g,'');
+  let rhs = parseFloat(parts[1]) || 0;
+  let a=0, b=0, c=0;
+  let m2 = expr.match(/([+\-]?[0-9]*\.?[0-9]*)x\^2/);
+  if (m2) { let s=m2[1]; a=(s===''||s==='+')?1:(s==='-'?-1:parseFloat(s)); }
+  let exNox2 = expr.replace(/[+\-]?[0-9]*\.?[0-9]*x\^2/,'');
+  let m1 = exNox2.match(/([+\-]?[0-9]*\.?[0-9]*)x(?!\^)/);
+  if (m1) { let s=m1[1]; b=(s===''||s==='+')?1:(s==='-'?-1:parseFloat(s)); }
+  let exConst = exNox2.replace(/[+\-]?[0-9]*\.?[0-9]*x(?!\^)/,'');
+  let mc = exConst.match(/([+\-]?[0-9]+\.?[0-9]*)/);
+  if (mc) c = parseFloat(mc[1]);
+  c -= rhs;
+  if (a===0) return showError('a ناتوانێت سفر بێت', 'quad-result');
+  let disc = b*b - 4*a*c;
+  let steps = [
+    {label:'هاوکیشەکە', val: eq},
+    {label:'کۆیفیشینتەکان', val: `a = ${fmt(a)},  b = ${fmt(b)},  c = ${fmt(c)}`},
+    {label:'Discriminant (Δ)', val: `Δ = b² − 4ac = (${fmt(b)})² − 4(${fmt(a)})(${fmt(c)}) = ${fmt(disc)}`},
+  ];
+  let ans;
+  if (disc < 0) {
+    let re = -b/(2*a), im = Math.sqrt(-disc)/(2*a);
+    steps.push({label:'Δ < 0 → وەڵامی موەقەدی', val:`x = ${fmt(re)} ± ${fmt(Math.abs(im))}i`});
+    ans = `x₁ = ${fmt(re)} + ${fmt(Math.abs(im))}i,  x₂ = ${fmt(re)} − ${fmt(Math.abs(im))}i`;
+  } else if (disc === 0) {
+    let x = -b/(2*a);
+    steps.push({label:'Δ = 0 → وەڵامێکی دووبارە', val:`x = −b / 2a = ${fmt(-b)} / ${fmt(2*a)} = ${fmt(x)}`});
+    ans = `x = ${fmt(x)}`;
+  } else {
+    let x1 = (-b + Math.sqrt(disc))/(2*a), x2 = (-b - Math.sqrt(disc))/(2*a);
+    steps.push({label:'x₁', val:`x₁ = (−b + √Δ) / 2a = (${fmt(-b)} + ${fmt(Math.sqrt(disc))}) / ${fmt(2*a)} = ${fmt(x1)}`});
+    steps.push({label:'x₂', val:`x₂ = (−b − √Δ) / 2a = (${fmt(-b)} − ${fmt(Math.sqrt(disc))}) / ${fmt(2*a)} = ${fmt(x2)}`});
+    ans = `x₁ = ${fmt(x1)},  x₂ = ${fmt(x2)}`;
+  }
+  buildSteps(steps, ans, 'quad-result');
+}
+
+/* =========== MATRIX =========== */
+let matrixSizes = {madd:2, msub:2, mmul:2};
+
+function buildMatrixGrid(prefix, n) {
+  matrixSizes[prefix] = n;
+  ['A','B'].forEach(m => {
+    let el = document.getElementById(prefix+'-'+m);
+    el.style.gridTemplateColumns = `repeat(${n}, 60px)`;
+    el.innerHTML = '';
+    for (let i=0;i<n;i++) for (let j=0;j<n;j++) {
+      let inp = document.createElement('input');
+      inp.type = 'text'; inp.className = ''; inp.placeholder = '0';
+      inp.id = `${prefix}_${m}_${i}_${j}`;
+      inp.style.cssText='width:60px;padding:0.5rem;margin:0;font-size:.88rem;border-radius:8px;';
+      el.appendChild(inp);
+    }
+  });
+}
+
+function setMatrixSize(prefix, n, btn) {
+  btn.closest('.size-selector').querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildMatrixGrid(prefix, n);
+}
+
+function readMatrix(prefix, m) {
+  let n = matrixSizes[prefix];
+  let mat = [];
+  for (let i=0;i<n;i++) {
+    mat.push([]);
+    for (let j=0;j<n;j++) {
+      let v = parseFloat(document.getElementById(`${prefix}_${m}_${i}_${j}`).value) || 0;
+      mat[i].push(v);
+    }
+  }
+  return mat;
+}
+
+function matToHtml(mat) {
+  let n = mat.length;
+  let grid = document.createElement('div');
+  grid.className = 'matrix-result-grid';
+  grid.style.gridTemplateColumns = `repeat(${n}, auto)`;
+  mat.forEach(row => row.forEach(v => {
+    let c = document.createElement('div'); c.className='mrc'; c.textContent=fmt(v); grid.appendChild(c);
+  }));
+  return grid.outerHTML;
+}
+
+function solveMatrix(op) {
+  const pfx = op==='add'?'madd':op==='sub'?'msub':'mmul';
+  const resId = pfx+'-result';
+  let A = readMatrix(pfx,'A'), B = readMatrix(pfx,'B');
+  let n = matrixSizes[pfx], C = [];
+  let opLabel = op==='add'?'زیادکردن':op==='sub'?'کەمکردنەوە':'لێکدانەوە';
+  let opSym = op==='add'?'+':op==='sub'?'−':'×';
+
+  if (op==='add') {
+    for (let i=0;i<n;i++){C.push([]); for(let j=0;j<n;j++) C[i].push(A[i][j]+B[i][j]);}
+  } else if (op==='sub') {
+    for (let i=0;i<n;i++){C.push([]); for(let j=0;j<n;j++) C[i].push(A[i][j]-B[i][j]);}
+  } else {
+    for (let i=0;i<n;i++){C.push([]); for(let j=0;j<n;j++){let s=0; for(let k=0;k<n;k++) s+=A[i][k]*B[k][j]; C[i].push(s);}}
+  }
+
+  let rowDetails = '';
+  if (op !== 'mul') {
+    C.forEach((row,i) => {
+      row.forEach((v,j) => {
+        let sym = op==='add'?'+':'−';
+        rowDetails += `C[${i+1}][${j+1}] = A[${i+1}][${j+1}] ${sym} B[${i+1}][${j+1}] = ${fmt(A[i][j])} ${sym} ${fmt(B[i][j])} = ${fmt(v)}<br>`;
+      });
+    });
+  } else {
+    C.forEach((row,i) => {
+      row.forEach((v,j) => {
+        let parts = A[i].map((a,k) => `(${fmt(a)}×${fmt(B[k][j])})` ).join(' + ');
+        rowDetails += `C[${i+1}][${j+1}] = ${parts} = ${fmt(v)}<br>`;
+      });
+    });
+  }
+
+  let html = `<div class="result-box">
+    <div class="result-header">✅ ئەنجامی ${opLabel}</div>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-content"><div class="step-label">ماتریس A</div><div>${matToHtml(A)}</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content"><div class="step-label">ماتریس B</div><div>${matToHtml(B)}</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content"><div class="step-label">A ${opSym} B — هەنگاو بە هەنگاو</div><div style="font-family:monospace;font-size:.82rem;color:var(--text2);direction:ltr;">${rowDetails}</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content"><div class="step-label">ئەنجامی کۆتایی C = A ${opSym} B</div><div>${matToHtml(C)}</div></div></div>
+    </div>
+  </div>`;
+  document.getElementById(resId).innerHTML = html;
+}
+
+/* =========== BINARY CONVERSION =========== */
+function binToDec() {
+  let bin = document.getElementById('b2d-in').value.trim();
+  if (!/^[01]+$/.test(bin)) return showError('تەنها 0 و 1 بنووسە', 'b2d-result');
+  let n = bin.length;
+  let total = 0;
+  let steps = [{label:'ژمارەی باینەری', val: bin}];
+  let breakdown = '';
+  for (let i=0;i<n;i++) {
+    let bit = parseInt(bin[i]);
+    let power = n-1-i;
+    let val = bit * Math.pow(2, power);
+    total += val;
+    breakdown += `${bit}×2^${power}=${val}  `;
+  }
+  steps.push({label:'لێکدانەوەی پلەکان', val: breakdown.trim()});
+  steps.push({label:'کۆی هەموو', val:`${breakdown.trim().split('  ').map(s=>s.split('=')[1]).join(' + ')} = ${total}`});
+  buildSteps(steps, `${bin}₂ = ${total}₁₀`, 'b2d-result');
+}
+
+function decToBin() {
+  let dec = parseInt(document.getElementById('d2b-in').value.trim());
+  if (isNaN(dec)||dec<0) return showError('ژمارەیەکی ئەرێنی بنووسە', 'd2b-result');
+  if (dec===0) { buildSteps([{label:'',val:'0 بە باینەری دەبێتە 0'}],'0₂','d2b-result'); return; }
+  let steps = [{label:'ژمارەی دەسیمال', val: String(dec)}];
+  let original = dec, tableRows = '', bits = [];
+  let tableHtml = `<table class="bin-table"><thead><tr><th>ژمارە</th><th>÷ 2</th><th>باقی</th></tr></thead><tbody>`;
+  while (dec > 0) {
+    let q = Math.floor(dec/2), r = dec%2;
+    tableHtml += `<tr><td>${dec}</td><td>${q}</td><td>${r}</td></tr>`;
+    bits.unshift(r); dec = q;
+  }
+  tableHtml += '</tbody></table>';
+  let bin = bits.join('');
+  steps.push({label:'گۆڕانەوە بە دابەشکردن بە 2', val: tableHtml});
+  steps.push({label:'باقییەکان بە پێچەوانە', val: `${bin}`});
+  buildSteps(steps, `${original}₁₀ = ${bin}₂`, 'd2b-result');
+}
+
+/* =========== BINARY ARITHMETIC =========== */
+function binaryArith() {
+  let aStr = document.getElementById('bin-a').value.trim();
+  let bStr = document.getElementById('bin-b').value.trim();
+  let op = document.getElementById('bin-op').value;
+  if (!/^[01]+$/.test(aStr)||!/^[01]+$/.test(bStr)) return showError('تەنها 0 و 1 بنووسە', 'bin-arith-result');
+  let a = parseInt(aStr,2), b = parseInt(bStr,2);
+  let res, resB, opName, opSym;
+  if (op==='add') { res=a+b; opName='زیادکردن'; opSym='+'; }
+  else if (op==='sub') { res=a-b; opName='کەمکردنەوە'; opSym='−'; }
+  else if (op==='mul') { res=a*b; opName='لێکدانەوە'; opSym='×'; }
+  else { if(b===0) return showError('دابەشکردن بە سفر نابێت','bin-arith-result'); res=Math.floor(a/b); opName='دابەشکردن'; opSym='÷'; }
+  resB = (res < 0) ? '-' + (-res).toString(2) : res.toString(2);
+  let steps = [
+    {label:`ژمارەی A (${aStr}₂)`, val:`= ${a}₁₀`},
+    {label:`ژمارەی B (${bStr}₂)`, val:`= ${b}₁₀`},
+    {label:`${opName} بە دەسیمال`, val:`${a} ${opSym} ${b} = ${res}`},
+    {label:'گۆڕانی ئەنجام بۆ باینەری', val:`${res}₁₀ = ${resB}₂`},
+  ];
+  buildSteps(steps, `${aStr} ${opSym} ${bStr} = ${resB}`, 'bin-arith-result');
+}
+
+/* =========== PRIME FACTORIZATION =========== */
+function primeFactorize() {
+  let n = parseInt(document.getElementById('prime-in').value.trim());
+  if (isNaN(n)||n<2) return showError('ژمارەیەک کە لە 2 زیاترە بنووسە', 'prime-result');
+  let original = n, factors = [], steps = [{label:'ژمارەکە', val: String(n)}];
+  let d = 2, breakdown = '';
+  while (d * d <= n) {
+    while (n % d === 0) { factors.push(d); breakdown += `${n} ÷ ${d} = ${n/d}  `; n /= d; }
+    d++;
+  }
+  if (n > 1) { factors.push(n); breakdown += `${n} خۆی پرایمە`; }
+  // Count powers
+  let countMap = {};
+  factors.forEach(f => countMap[f] = (countMap[f]||0)+1);
+  let formatted = Object.entries(countMap).map(([f,e]) => e>1?`${f}^${e}`:f).join(' × ');
+  steps.push({label:'دابەشکردن هەنگاو بە هەنگاو', val: breakdown.trim().replace(/  /g,'<br>')});
+  steps.push({label:'فاکتەرە پرایمەکان', val: factors.join(' × ')});
+  if (Object.values(countMap).some(e=>e>1)) steps.push({label:'بەشێوەی توانەدار', val: formatted});
+  buildSteps(steps, `${original} = ${formatted}`, 'prime-result');
+}
+
+/* =========== DERIVATIVES =========== */
+function parseAndDifferentiate(expr) {
+  expr = expr.trim().replace(/\s/g,'');
+  let steps = [], result = '';
+
+  // Single special functions
+  if (expr === 'sin(x)') return {steps:[{label:'d/dx[sin(x)]', val:'= cos(x)'}], ans:'cos(x)'};
+  if (expr === 'cos(x)') return {steps:[{label:'d/dx[cos(x)]', val:'= −sin(x)'}], ans:'−sin(x)'};
+  if (expr === 'tan(x)') return {steps:[{label:'d/dx[tan(x)]', val:'= sec²(x)'}], ans:'sec²(x)'};
+  if (expr === 'e^x' || expr === 'exp(x)') return {steps:[{label:'d/dx[eˣ]', val:'= eˣ'}], ans:'eˣ'};
+  if (expr === 'ln(x)') return {steps:[{label:'d/dx[ln(x)]', val:'= 1/x'}], ans:'1/x'};
+  if (expr === '1/x') return {steps:[{label:'d/dx[1/x] = d/dx[x⁻¹]', val:'= −1·x⁻² = −1/x²'}], ans:'−1/x²'};
+
+  // Try polynomial: terms separated by + or -
+  // Split into terms
+  let terms = splitTerms(expr);
+  let resultTerms = [];
+  steps.push({label:'هاوکیشەکە', val: expr});
+  steps.push({label:'قاعیدەی توانە', val:'d/dx[xⁿ] = n·xⁿ⁻¹'});
+
+  terms.forEach(t => {
+    let d = diffTerm(t);
+    steps.push({label:`d/dx[${t.orig}]`, val:`= ${d.result}`});
+    if (d.val !== 0) resultTerms.push(d.result);
+  });
+
+  let ans = resultTerms.length ? resultTerms.join(' + ').replace(/\+ -/g,'− ').replace(/\+-/g,'−') : '0';
+  return {steps, ans};
+}
+
+function splitTerms(expr) {
+  // Insert + before any - that isn't at start or after ^
+  let normalized = expr.replace(/([^+\-\^])(\-)/g,'$1 + -$2');
+  let parts = normalized.split(/(?<=[^+\-\^])\s*\+\s*/);
+  return parts.map(p => ({orig: p.trim().replace(/\s/g,'')}));
+}
+
+function diffTerm(t) {
+  let s = t.orig;
+  // constant
+  if (/^[+\-]?[0-9]+$/.test(s)) return {result:'0', val:0};
+  // coeff*x^n
+  let m = s.match(/^([+\-]?[0-9]*\.?[0-9]*)x\^([+\-]?[0-9]+\.?[0-9]*)$/);
+  if (m) {
+    let coef = m[1]===''||m[1]==='+'?1:(m[1]==='-'?-1:parseFloat(m[1]));
+    let n = parseFloat(m[2]);
+    let newCoef = coef*n, newN = n-1;
+    let res = (newCoef===0)?'0':(newN===0?fmt(newCoef):(newN===1?`${newCoef}x`:`${fmt(newCoef)}x^${fmt(newN)}`));
+    return {result: res, val: newCoef};
+  }
+  // x^n (no coef)
+  m = s.match(/^([+\-]?)x\^([+\-]?[0-9]+\.?[0-9]*)$/);
+  if (m) {
+    let coef = m[1]==='-'?-1:1;
+    let n = parseFloat(m[2]);
+    let newCoef = coef*n, newN = n-1;
+    let res = newN===0?fmt(newCoef):(newN===1?`${newCoef}x`:`${fmt(newCoef)}x^${fmt(newN)}`);
+    return {result: res, val: newCoef};
+  }
+  // coeff*x
+  m = s.match(/^([+\-]?[0-9]*\.?[0-9]*)x$/);
+  if (m) {
+    let coef = m[1]===''||m[1]==='+'?1:(m[1]==='-'?-1:parseFloat(m[1]));
+    return {result: fmt(coef), val: coef};
+  }
+  // just x
+  if (s==='x'||s==='+x') return {result:'1', val:1};
+  if (s==='-x') return {result:'-1', val:-1};
+  return {result:`d/dx[${s}]`, val:NaN};
+}
+
+function solveDerivative() {
+  let expr = document.getElementById('deriv-in').value.trim();
+  if (!expr) return showError('فورموڵێک بنووسە', 'deriv-result');
+  let r = parseAndDifferentiate(expr);
+  let steps = r.steps;
+  steps.push({label:'ئەنجامی کۆتایی', val:`f'(x) = ${r.ans}`});
+  buildSteps(steps, `f'(x) = ${r.ans}`, 'deriv-result');
+}
+
+/* =========== INTEGRALS =========== */
+function solveIntegral() {
+  let expr = document.getElementById('integ-in').value.trim();
+  if (!expr) return showError('فورموڵێک بنووسە', 'integ-result');
+  let s = expr.replace(/\s/g,'');
+  let steps = [{label:'فورموڵەکە', val:`∫ ${expr} dx`}];
+  let ans = '';
+
+  if (s==='sin(x)') { steps.push({label:'∫sin(x)dx', val:'= −cos(x) + C'}); ans='−cos(x) + C'; }
+  else if (s==='cos(x)') { steps.push({label:'∫cos(x)dx', val:'= sin(x) + C'}); ans='sin(x) + C'; }
+  else if (s==='e^x'||s==='exp(x)') { steps.push({label:'∫eˣdx', val:'= eˣ + C'}); ans='eˣ + C'; }
+  else if (s==='ln(x)') { steps.push({label:'∫ln(x)dx', val:'= x·ln(x) − x + C'}); ans='x·ln(x) − x + C'; }
+  else if (s==='1/x') { steps.push({label:'∫(1/x)dx', val:'= ln|x| + C'}); ans='ln|x| + C'; }
+  else {
+    steps.push({label:'قاعیدەی توانە', val:'∫xⁿ dx = xⁿ⁺¹/(n+1) + C'});
+    let terms = splitTerms(s);
+    let resultTerms = [];
+    terms.forEach(t => {
+      let r = integTerm(t);
+      steps.push({label:`∫(${t.orig})dx`, val:`= ${r.result}`});
+      resultTerms.push(r.result);
+    });
+    ans = resultTerms.join(' + ').replace(/\+ -/g,'− ').replace(/\+-/g,'−') + ' + C';
+  }
+  if (!ans) ans = `∫(${expr})dx + C`;
+  buildSteps(steps, `∫(${expr})dx = ${ans}`, 'integ-result');
+}
+
+function integTerm(t) {
+  let s = t.orig;
+  if (/^[+\-]?[0-9]+$/.test(s)) {
+    let c=parseFloat(s)||0;
+    return {result: c===0?'0':`${fmt(c)}x`};
+  }
+  let m = s.match(/^([+\-]?[0-9]*\.?[0-9]*)x\^([+\-]?[0-9]+\.?[0-9]*)$/);
+  if (m) {
+    let coef=m[1]===''||m[1]==='+'?1:(m[1]==='-'?-1:parseFloat(m[1]));
+    let n=parseFloat(m[2]);
+    let newN=n+1, newCoef=coef/newN;
+    let cStr = Number.isInteger(newCoef)?fmt(newCoef):`${fmt(coef)}/${fmt(newN)}`;
+    return {result:`${cStr}x^${fmt(newN)}`};
+  }
+  m = s.match(/^([+\-]?)x\^([+\-]?[0-9]+\.?[0-9]*)$/);
+  if (m) {
+    let coef=m[1]==='-'?-1:1, n=parseFloat(m[2]), newN=n+1, newCoef=coef/newN;
+    let cStr = Number.isInteger(newCoef)?fmt(newCoef):`1/${fmt(newN)}`;
+    return {result:`${cStr}x^${fmt(newN)}`};
+  }
+  m = s.match(/^([+\-]?[0-9]*\.?[0-9]*)x$/);
+  if (m) {
+    let coef=m[1]===''||m[1]==='+'?1:(m[1]==='-'?-1:parseFloat(m[1]));
+    let half=coef/2;
+    return {result:`${fmt(half)}x^2`};
+  }
+  if (s==='x'||s==='+x') return {result:'(1/2)x²'};
+  if (s==='-x') return {result:'−(1/2)x²'};
+  return {result:`∫(${s})dx`};
+}
+
+/* =========== COMBINATORICS =========== */
+function factorial(n) {
+  if (n < 0) return null;
+  if (n === 0 || n === 1) return 1n;
+  let r = 1n;
+  for (let i = 2n; i <= BigInt(n); i++) r *= i;
+  return r;
+}
+
+function factSteps(n) {
+  if (n === 0) return { steps: [{label:'پێناسە', val:'0! = 1 (بە پێناسە)'}], ans: '1' };
+  if (n === 1) return { steps: [{label:'پێناسە', val:'1! = 1'}], ans: '1' };
+  let chain = Array.from({length:n},(_,i)=>i+1).join(' × ');
+  let result = factorial(n);
+  let steps = [
+    {label:'فورموڵ', val:`n! = n × (n−1) × ... × 1`},
+    {label:`${n}! = `, val: chain},
+  ];
+  // Show running product up to 8 steps
+  if (n <= 12) {
+    let running = 1n;
+    for (let i=1; i<=n; i++) {
+      running *= BigInt(i);
+      if (i >= 2) steps.push({label:`بەدوای لێکدانەوەی ${i}`, val:`${Array.from({length:i},(_,k)=>k+1).join(' × ')} = ${running.toString()}`});
+    }
+  }
+  steps.push({label:'ئەنجامی کۆتایی', val:`${n}! = ${result.toString()}`});
+  return { steps, ans: result.toString() };
+}
+
+function solveFactorial() {
+  let n = parseInt(document.getElementById('fact-n').value.trim());
+  if (isNaN(n) || n < 0) return showError('ژمارەیەکی تەواوی ئەرێنی بنووسە (0 یان زیاتر)', 'fact-result');
+  if (n > 20) return showError('ژمارەکە زۆر گەورەیە (زیاتر لە 20 مەبنووسە)', 'fact-result');
+  let r = factSteps(n);
+  buildSteps(r.steps, `${n}! = ${r.ans}`, 'fact-result');
+}
+
+function setPermEx(n, r) {
+  document.getElementById('perm-n').value = n;
+  document.getElementById('perm-r').value = r;
+}
+function setCombEx(n, r) {
+  document.getElementById('comb-n').value = n;
+  document.getElementById('comb-r').value = r;
+}
+
+function solvePermutation() {
+  let n = parseInt(document.getElementById('perm-n').value.trim());
+  let r = parseInt(document.getElementById('perm-r').value.trim());
+  if (isNaN(n)||isNaN(r)) return showError('n و r بنووسە', 'perm-result');
+  if (r > n) return showError('r نابێت لە n زیاتر بێت', 'perm-result');
+  if (n < 0 || r < 0) return showError('ژمارەکان دەبێت ئەرێنی بن', 'perm-result');
+  if (n > 15) return showError('n زۆر گەورەیە (زیاتر لە 15 مەبنووسە)', 'perm-result');
+  let nF = factorial(n), nrF = factorial(n-r);
+  let result = nF / nrF;
+  let steps = [
+    {label:'فورموڵ', val:'P(n, r) = n! / (n − r)!'},
+    {label:'دانانی بەهاکان', val:`P(${n}, ${r}) = ${n}! / (${n} − ${r})! = ${n}! / ${n-r}!`},
+    {label:`${n}!`, val:`${n}! = ${nF.toString()}`},
+    {label:`${n-r}!`, val:`${n-r}! = ${nrF.toString()}`},
+    {label:'دابەشکردن', val:`${nF.toString()} ÷ ${nrF.toString()} = ${result.toString()}`},
+  ];
+  buildSteps(steps, `P(${n}, ${r}) = ${result.toString()}`, 'perm-result');
+}
+
+function solveCombination() {
+  let n = parseInt(document.getElementById('comb-n').value.trim());
+  let r = parseInt(document.getElementById('comb-r').value.trim());
+  if (isNaN(n)||isNaN(r)) return showError('n و r بنووسە', 'comb-result');
+  if (r > n) return showError('r نابێت لە n زیاتر بێت', 'comb-result');
+  if (n < 0 || r < 0) return showError('ژمارەکان دەبێت ئەرێنی بن', 'comb-result');
+  if (n > 15) return showError('n زۆر گەورەیە (زیاتر لە 15 مەبنووسە)', 'comb-result');
+  let nF = factorial(n), rF = factorial(r), nrF = factorial(n-r);
+  let result = nF / (rF * nrF);
+  let steps = [
+    {label:'فورموڵ', val:'C(n, r) = n! / (r! × (n − r)!)'},
+    {label:'دانانی بەهاکان', val:`C(${n}, ${r}) = ${n}! / (${r}! × ${n-r}!)`},
+    {label:`${n}!`, val:`${n}! = ${nF.toString()}`},
+    {label:`${r}!`, val:`${r}! = ${rF.toString()}`},
+    {label:`${n-r}!`, val:`${n-r}! = ${nrF.toString()}`},
+    {label:'ژێرەوە (denominator)', val:`${rF.toString()} × ${nrF.toString()} = ${(rF*nrF).toString()}`},
+    {label:'دابەشکردن', val:`${nF.toString()} ÷ ${(rF*nrF).toString()} = ${result.toString()}`},
+    {label:'جیاوازی لە Permutation', val:`C(${n},${r}) = P(${n},${r}) / ${r}! = ${(nF/nrF).toString()} / ${rF.toString()} = ${result.toString()} (ئۆردەر گرینگ نییە)`},
+  ];
+  buildSteps(steps, `C(${n}, ${r}) = ${result.toString()}`, 'comb-result');
+}
+
+function solveAll() {
+  let n = parseInt(document.getElementById('comp-n').value.trim());
+  let r = parseInt(document.getElementById('comp-r').value.trim());
+  if (isNaN(n)||isNaN(r)) return showError('n و r بنووسە', 'comp-result');
+  if (r > n) return showError('r نابێت لە n زیاتر بێت', 'comp-result');
+  if (n > 15) return showError('n زۆر گەورەیە', 'comp-result');
+  let nF = factorial(n), rF = factorial(r), nrF = factorial(n-r);
+  let P = nF / nrF;
+  let C = nF / (rF * nrF);
+  let html = `<div class="result-box">
+    <div class="result-header">✅ بەراوردی سێیەکان بۆ n=${n}, r=${r}</div>
+    <div class="step-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-content">
+        <div class="step-label">❗ Factorial — ${n}!</div>
+        <div class="step-val">${n}! = ${nF.toString()}</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-content">
+        <div class="step-label">🔀 Permutation — P(${n}, ${r}) = n! / (n−r)!</div>
+        <div class="step-val">${nF.toString()} / ${nrF.toString()} = ${P.toString()}</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-content">
+        <div class="step-label">🤝 Combination — C(${n}, ${r}) = n! / (r! × (n−r)!)</div>
+        <div class="step-val">${nF.toString()} / (${rF.toString()} × ${nrF.toString()}) = ${C.toString()}</div>
+      </div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-content">
+        <div class="step-label">🔍 جیاوازی گرینگ</div>
+        <div class="step-val">P > C هەمیشە | P = C × r! | ئۆردەر گرینگ بێت → P، ئۆردەر گرینگ نەبێت → C</div>
+      </div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:1rem;">
+      <div class="final-answer" style="font-size:1rem;">${n}! = ${nF.toString()}</div>
+      <div class="final-answer" style="font-size:1rem;">P = ${P.toString()}</div>
+      <div class="final-answer" style="font-size:1rem;">C = ${C.toString()}</div>
+    </div>
+  </div>`;
+  document.getElementById('comp-result').innerHTML = html;
+}
+
+/* =========== INIT =========== */
+showHome();
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    let active = document.querySelector('.section-page.active .solve-btn');
+    if (active) active.click();
+  }
+});
+</script>
+
+</body>
+</html>
