@@ -1,0 +1,1943 @@
+!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AMZ Maths Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c14;
+    --bg2: #0f1220;
+    --bg3: #141828;
+    --card: #1a1f35;
+    --card2: #1f2540;
+    --border: #2a3058;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --accent3: #00e5c0;
+    --accent4: #ff6b6b;
+    --accent5: #ffd166;
+    --text: #e8ecf5;
+    --text2: #9aa5c4;
+    --text3: #5d6a8a;
+    --glow: rgba(79,142,247,0.15);
+    --glow2: rgba(124,92,252,0.15);
+    --success: #00e5c0;
+    --error: #ff6b6b;
+    --warn: #ffd166;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Tajawal', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background pattern */
+  body::before {
+    content:'';
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background:
+      radial-gradient(ellipse 800px 500px at 20% 10%, rgba(79,142,247,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 600px 400px at 80% 80%, rgba(124,92,252,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 400px 300px at 60% 30%, rgba(0,229,192,0.04) 0%, transparent 50%);
+    pointer-events:none; z-index:0;
+  }
+
+  .grid-bg {
+    position:fixed; top:0; left:0; right:0; bottom:0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none; z-index:0;
+  }
+
+  /* Header */
+  header {
+    position: relative; z-index:10;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,12,20,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky; top:0;
+  }
+
+  .logo {
+    display:flex; align-items:center; gap:12px;
+  }
+  .logo-icon {
+    width:44px; height:44px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; font-weight:900;
+    box-shadow: 0 0 20px rgba(79,142,247,0.4);
+    color:#fff;
+    letter-spacing:-1px;
+  }
+  .logo-text { line-height:1.1; }
+  .logo-text .brand { font-size:11px; color:var(--accent); font-weight:700; letter-spacing:3px; text-transform:uppercase; }
+  .logo-text .name { font-size:20px; font-weight:800; color:var(--text); }
+
+  .header-badge {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    padding: 6px 16px;
+    border-radius:20px;
+    font-size:12px; font-weight:700;
+    letter-spacing:1px;
+    color:#fff;
+    box-shadow: 0 4px 15px rgba(79,142,247,0.3);
+  }
+
+  /* Layout */
+  .container {
+    position:relative; z-index:1;
+    max-width:1400px;
+    margin:0 auto;
+    padding:30px 20px;
+    display:grid;
+    grid-template-columns: 280px 1fr;
+    gap:24px;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    position:sticky; top:84px;
+    height:calc(100vh - 104px);
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .sidebar::-webkit-scrollbar { width:4px; }
+  .sidebar::-webkit-scrollbar-track { background:transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+
+  .sidebar-label {
+    font-size:10px; font-weight:700; color:var(--text3); letter-spacing:2px;
+    text-transform:uppercase; padding:8px 12px 4px;
+  }
+
+  .nav-btn {
+    display:flex; align-items:center; gap:12px;
+    padding:12px 16px;
+    border-radius:12px;
+    border:none; cursor:pointer;
+    background:transparent;
+    color:var(--text2);
+    font-family:'Tajawal',sans-serif;
+    font-size:14px; font-weight:500;
+    text-align:right;
+    transition:all 0.2s;
+    width:100%;
+    position:relative;
+    overflow:hidden;
+  }
+  .nav-btn::before {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(135deg, var(--glow), var(--glow2));
+    opacity:0; transition:opacity 0.2s;
+    border-radius:12px;
+  }
+  .nav-btn:hover { color:var(--text); background:var(--card); }
+  .nav-btn:hover::before { opacity:1; }
+  .nav-btn.active {
+    color:var(--text);
+    background:var(--card2);
+    border:1px solid var(--border);
+    box-shadow: 0 0 20px var(--glow);
+  }
+  .nav-btn.active::before { opacity:1; }
+  .nav-btn.active .nav-dot { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+
+  .nav-icon { font-size:18px; flex-shrink:0; }
+  .nav-dot {
+    width:6px; height:6px; border-radius:50%;
+    background:var(--text3); margin-right:auto;
+    transition:all 0.2s; flex-shrink:0;
+  }
+
+  /* Main content */
+  .main { min-height:calc(100vh - 120px); }
+
+  /* Page title */
+  .page-header {
+    margin-bottom:24px;
+  }
+  .page-header h1 {
+    font-size:28px; font-weight:800;
+    background:linear-gradient(135deg, var(--text), var(--accent));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    background-clip:text;
+    margin-bottom:6px;
+  }
+  .page-header p { color:var(--text2); font-size:14px; line-height:1.6; }
+
+  /* Cards */
+  .card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    margin-bottom:20px;
+    position:relative;
+    overflow:hidden;
+  }
+  .card::before {
+    content:''; position:absolute; top:0; right:0;
+    width:200px; height:200px;
+    background:radial-gradient(circle, var(--glow) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .card-title {
+    font-size:16px; font-weight:700; color:var(--text);
+    margin-bottom:16px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .card-title span { font-size:18px; }
+
+  /* Inputs */
+  .input-group { margin-bottom:16px; }
+  .input-label {
+    display:block; font-size:12px; font-weight:600;
+    color:var(--text2); margin-bottom:8px; letter-spacing:0.5px;
+  }
+  .inp {
+    width:100%;
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px 16px;
+    color:var(--text);
+    font-family:'Tajawal',sans-serif;
+    font-size:14px;
+    transition:all 0.2s;
+    outline:none;
+    direction:ltr;
+  }
+  .inp:focus {
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(79,142,247,0.1);
+  }
+  .inp::placeholder { color:var(--text3); }
+
+  textarea.inp { resize:vertical; min-height:80px; }
+
+  /* Buttons */
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 24px;
+    border-radius:10px;
+    border:none; cursor:pointer;
+    font-family:'Tajawal',sans-serif;
+    font-size:14px; font-weight:700;
+    transition:all 0.2s;
+    letter-spacing:0.5px;
+  }
+  .btn-primary {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    box-shadow:0 4px 15px rgba(79,142,247,0.3);
+  }
+  .btn-primary:hover {
+    transform:translateY(-1px);
+    box-shadow:0 6px 20px rgba(79,142,247,0.4);
+  }
+  .btn-primary:active { transform:translateY(0); }
+  .btn-sm { padding:8px 16px; font-size:13px; }
+  .btn-outline {
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text2);
+  }
+  .btn-outline:hover { border-color:var(--accent); color:var(--accent); background:var(--glow); }
+
+  /* Results */
+  .result-box {
+    background:var(--bg2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    margin-top:16px;
+    display:none;
+  }
+  .result-box.show { display:block; }
+
+  .result-title {
+    font-size:13px; font-weight:700; color:var(--accent);
+    letter-spacing:1px; text-transform:uppercase;
+    margin-bottom:12px;
+    display:flex; align-items:center; gap:6px;
+  }
+
+  .step {
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:10px;
+    position:relative;
+    padding-right:50px;
+  }
+  .step-num {
+    position:absolute; right:14px; top:14px;
+    width:24px; height:24px;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800; color:#fff;
+    flex-shrink:0;
+  }
+  .step-title {
+    font-size:13px; font-weight:700; color:var(--accent3);
+    margin-bottom:6px;
+  }
+  .step-content {
+    font-size:14px; color:var(--text); line-height:1.7;
+  }
+  .step-math {
+    font-family:'JetBrains Mono', monospace;
+    background:var(--bg);
+    padding:8px 12px;
+    border-radius:8px;
+    margin-top:8px;
+    font-size:13px;
+    color:var(--accent5);
+    border-left:3px solid var(--accent);
+    direction:ltr;
+  }
+
+  .final-answer {
+    background:linear-gradient(135deg, rgba(0,229,192,0.1), rgba(79,142,247,0.1));
+    border:1px solid var(--accent3);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-top:12px;
+  }
+  .final-answer .fa-label {
+    font-size:11px; font-weight:700; color:var(--accent3);
+    letter-spacing:1px; text-transform:uppercase; margin-bottom:6px;
+  }
+  .final-answer .fa-value {
+    font-size:16px; font-weight:800; color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    direction:ltr;
+  }
+
+  .error-box {
+    background:rgba(255,107,107,0.1);
+    border:1px solid var(--error);
+    border-radius:10px;
+    padding:12px 16px;
+    color:var(--error);
+    font-size:14px;
+    margin-top:12px;
+  }
+
+  /* Table */
+  table {
+    width:100%; border-collapse:collapse;
+    font-size:13px;
+  }
+  th {
+    background:var(--card2);
+    padding:10px 12px;
+    text-align:center;
+    color:var(--accent);
+    font-weight:700;
+    border:1px solid var(--border);
+    font-size:12px; letter-spacing:0.5px;
+  }
+  td {
+    padding:8px 12px;
+    text-align:center;
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:'JetBrains Mono', monospace;
+    font-size:13px;
+  }
+  tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+  tr:hover td { background:var(--glow); }
+
+  .badge {
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:20px;
+    font-size:11px; font-weight:700;
+    letter-spacing:0.5px;
+  }
+  .badge-true { background:rgba(0,229,192,0.15); color:var(--accent3); border:1px solid var(--accent3); }
+  .badge-false { background:rgba(255,107,107,0.15); color:var(--error); border:1px solid var(--error); }
+  .badge-blue { background:rgba(79,142,247,0.15); color:var(--accent); border:1px solid var(--accent); }
+  .badge-purple { background:rgba(124,92,252,0.15); color:var(--accent2); border:1px solid var(--accent2); }
+
+  /* Grid layout for topic sections */
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .three-col { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+
+  /* Tabs */
+  .tabs {
+    display:flex; gap:4px;
+    background:var(--bg2);
+    padding:4px;
+    border-radius:10px;
+    margin-bottom:20px;
+    border:1px solid var(--border);
+  }
+  .tab {
+    flex:1; padding:9px 12px;
+    border-radius:8px;
+    border:none; cursor:pointer;
+    font-family:'Tajawal',sans-serif;
+    font-size:13px; font-weight:600;
+    color:var(--text2);
+    background:transparent;
+    transition:all 0.2s;
+  }
+  .tab.active {
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    box-shadow:0 2px 10px rgba(79,142,247,0.3);
+  }
+  .tab:hover:not(.active) { color:var(--text); background:var(--card); }
+
+  /* Info tags */
+  .info-tag {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:4px 10px;
+    background:rgba(79,142,247,0.1);
+    border:1px solid rgba(79,142,247,0.3);
+    border-radius:6px;
+    font-size:12px; color:var(--accent);
+    margin:3px;
+  }
+
+  /* Canvas for graph */
+  canvas {
+    border-radius:10px;
+    background:var(--bg2);
+    border:1px solid var(--border);
+    display:block;
+  }
+
+  /* Home grid */
+  .home-grid {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+    gap:16px;
+    margin-top:20px;
+  }
+  .home-card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    cursor:pointer;
+    transition:all 0.25s;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .home-card::after {
+    content:''; position:absolute;
+    bottom:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--accent), var(--accent2));
+    transform:scaleX(0); transition:transform 0.25s;
+  }
+  .home-card:hover { border-color:var(--accent); transform:translateY(-3px); box-shadow:0 8px 30px var(--glow); }
+  .home-card:hover::after { transform:scaleX(1); }
+  .home-card-icon { font-size:32px; margin-bottom:10px; }
+  .home-card-name { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+  .home-card-desc { font-size:12px; color:var(--text2); line-height:1.4; }
+
+  /* Hidden pages */
+  .page { display:none; }
+  .page.active { display:block; }
+
+  /* Divider */
+  .divider {
+    height:1px; background:var(--border);
+    margin:16px 0;
+  }
+
+  .mono { font-family:'JetBrains Mono', monospace; direction:ltr; display:inline-block; }
+
+  @media(max-width:900px) {
+    .container { grid-template-columns:1fr; }
+    .sidebar { position:relative; top:0; height:auto; overflow-x:auto; overflow-y:hidden; flex-direction:row; padding-bottom:8px; }
+    .sidebar-label { display:none; }
+    .nav-btn { min-width:120px; flex-direction:column; gap:4px; padding:10px; font-size:12px; }
+    .nav-dot { display:none; }
+    .two-col, .three-col { grid-template-columns:1fr; }
+  }
+
+  .highlight { color: var(--accent5); font-weight:700; }
+  .highlight-blue { color: var(--accent); font-weight:700; }
+  .highlight-green { color: var(--accent3); font-weight:700; }
+  .highlight-red { color: var(--error); font-weight:700; }
+  .highlight-purple { color: var(--accent2); font-weight:700; }
+
+  /* Chips */
+  .chip-group { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .chip {
+    padding:5px 12px; border-radius:20px;
+    background:var(--card2); border:1px solid var(--border);
+    font-size:12px; color:var(--text2); cursor:pointer;
+    transition:all 0.15s;
+  }
+  .chip:hover, .chip.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+
+  /* Notification */
+  .notif {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:var(--card2); border:1px solid var(--accent3);
+    color:var(--text); padding:12px 20px;
+    border-radius:10px; font-size:14px;
+    box-shadow:0 8px 30px rgba(0,0,0,0.5);
+    z-index:1000; display:none;
+    animation: fadeInUp 0.3s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity:0; transform:translateX(-50%) translateY(10px); }
+    to { opacity:1; transform:translateX(-50%) translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">AM</div>
+    <div class="logo-text">
+      <div class="brand">AMZ GROUP</div>
+      <div class="name">Maths Pro</div>
+    </div>
+  </div>
+  <div class="header-badge">Discrete Mathematics</div>
+</header>
+
+<div class="container">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-label">بابەتەکان</div>
+    <button class="nav-btn active" onclick="showPage('home')">
+      <span class="nav-icon">🏠</span> سەرەکی
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('sets')">
+      <span class="nav-icon">🔵</span> Set Theory
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('logic')">
+      <span class="nav-icon">⚡</span> Logic
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('limits')">
+      <span class="nav-icon">♾️</span> Limits
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('sequences')">
+      <span class="nav-icon">🔢</span> Sequences
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('series')">
+      <span class="nav-icon">∑</span> Series
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('graphs')">
+      <span class="nav-icon">🕸️</span> Graph Theory
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('counting')">
+      <span class="nav-icon">🎲</span> Counting
+      <span class="nav-dot"></span>
+    </button>
+    <button class="nav-btn" onclick="showPage('binary')">
+      <span class="nav-icon">💻</span> Binary System
+      <span class="nav-dot"></span>
+    </button>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- HOME -->
+    <div id="page-home" class="page active">
+      <div class="page-header">
+        <h1>بەخێربێیت بۆ AMZ Maths Pro 🎓</h1>
+        <p>پرۆگرامی تایبەت بە ماتماتیکی گسەپەکان (Discrete Mathematics) بۆ قۆناغی یەکەمی بەشی تەکنەلۆجیای زانیاری — هەر بابەتێک هەڵبژێرە و هاوکێشەکانت بیرکاری بکرێن بە شێوازی قەدەمەبەقەدەم بە زمانی کوردی سۆرانی</p>
+      </div>
+      <div class="home-grid">
+        <div class="home-card" onclick="showPage('sets')">
+          <div class="home-card-icon">🔵</div>
+          <div class="home-card-name">Set Theory</div>
+          <div class="home-card-desc">یەکێتی، بڕکردن، جیاوازی، پووچەڵکاری</div>
+        </div>
+        <div class="home-card" onclick="showPage('logic')">
+          <div class="home-card-icon">⚡</div>
+          <div class="home-card-name">Logic</div>
+          <div class="home-card-desc">جەدوەلی ڕاستی، AND, OR, NOT, XOR</div>
+        </div>
+        <div class="home-card" onclick="showPage('limits')">
+          <div class="home-card-icon">♾️</div>
+          <div class="home-card-name">Limits</div>
+          <div class="home-card-desc">سنوور، ئینفینیتی، ئەلجبرای سنوور</div>
+        </div>
+        <div class="home-card" onclick="showPage('sequences')">
+          <div class="home-card-icon">🔢</div>
+          <div class="home-card-name">Sequences</div>
+          <div class="home-card-desc">رێزی ژمارەیی، AP, GP, ئاستەنگەکان</div>
+        </div>
+        <div class="home-card" onclick="showPage('series')">
+          <div class="home-card-icon">∑</div>
+          <div class="home-card-name">Series</div>
+          <div class="home-card-desc">کۆکردنی رێز، AP, GP, کۆی بێدواداچوون</div>
+        </div>
+        <div class="home-card" onclick="showPage('graphs')">
+          <div class="home-card-icon">🕸️</div>
+          <div class="home-card-name">Graph Theory</div>
+          <div class="home-card-desc">گراف، تووک، پەیوەندی، درجە</div>
+        </div>
+        <div class="home-card" onclick="showPage('counting')">
+          <div class="home-card-icon">🎲</div>
+          <div class="home-card-name">Counting</div>
+          <div class="home-card-desc">Permutation, Combination, Factorial</div>
+        </div>
+        <div class="home-card" onclick="showPage('binary')">
+          <div class="home-card-icon">💻</div>
+          <div class="home-card-name">Binary System</div>
+          <div class="home-card-desc">دیسمال بۆ باینری و بەرعەکس</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SET THEORY -->
+    <div id="page-sets" class="page">
+      <div class="page-header">
+        <h1>🔵 Set Theory — تیۆری کۆمەڵەکان</h1>
+        <p>کارکردن لەسەر یەکێتی، بڕکردن، جیاوازی، کۆمەڵەی تۆخم و زیادکاری</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🔵</span> داخڵکردنی کۆمەڵەکان</div>
+        <div class="two-col">
+          <div class="input-group">
+            <label class="input-label">کۆمەڵەی A (ژمارەکان جیابکەرەوە بە کۆما)</label>
+            <input class="inp" id="setA" placeholder="1, 2, 3, 4, 5" value="1, 2, 3, 4, 5">
+          </div>
+          <div class="input-group">
+            <label class="input-label">کۆمەڵەی B</label>
+            <input class="inp" id="setB" placeholder="3, 4, 5, 6, 7" value="3, 4, 5, 6, 7">
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Universal Set U (ئۆپشنی)</label>
+          <input class="inp" id="setU" placeholder="1, 2, 3, 4, 5, 6, 7, 8, 9, 10" value="1, 2, 3, 4, 5, 6, 7, 8, 9, 10">
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button class="btn btn-primary" onclick="calcSet('union')">A ∪ B یەکێتی</button>
+          <button class="btn btn-primary" onclick="calcSet('inter')">A ∩ B بڕکردن</button>
+          <button class="btn btn-primary" onclick="calcSet('diff')">A - B جیاوازی</button>
+          <button class="btn btn-primary" onclick="calcSet('sym')">A △ B هاوتایی</button>
+          <button class="btn btn-primary" onclick="calcSet('comp')">A' پووچەڵکاری</button>
+          <button class="btn btn-primary" onclick="calcSet('power')">P(A) کۆمەڵەی تۆخم</button>
+          <button class="btn btn-primary" onclick="calcSet('cart')">A × B زیادکاری</button>
+          <button class="btn btn-primary" onclick="calcSet('subset')">ژیرکۆمەڵەکان</button>
+        </div>
+        <div id="result-sets" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- LOGIC -->
+    <div id="page-logic" class="page">
+      <div class="page-header">
+        <h1>⚡ Logic — مەنتیق</h1>
+        <p>دروستکردنی جەدوەلی ڕاستی و شیکردنەوەی دەرئەنجام بۆ هاوکێشەی مەنتیقی</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>⚡</span> جەدوەلی ڕاستی — Truth Table</div>
+        <div class="input-group">
+          <label class="input-label">هاوکێشەی مەنتیقی داخڵ بکە</label>
+          <input class="inp" id="logicExpr" placeholder="p AND q OR NOT r" value="p AND q OR NOT r" style="direction:ltr;">
+          <small style="color:var(--text3); font-size:11px; margin-top:4px; display:block;">کارەکان: AND, OR, NOT, XOR, NAND, NOR, IMPLIES, IFF — نموونە: p AND q, NOT p OR q, p IMPLIES q</small>
+        </div>
+        <button class="btn btn-primary" onclick="calcLogic()">📊 دروستکردنی جەدوەلی ڕاستی</button>
+        <div id="result-logic" class="result-box"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span>🔎</span> شیکردنەوەی دەرئەنجام</div>
+        <div class="two-col">
+          <div class="input-group">
+            <label class="input-label">پێشکەوتن ١ (Premise 1)</label>
+            <input class="inp" id="prem1" placeholder="p IMPLIES q" value="p IMPLIES q">
+          </div>
+          <div class="input-group">
+            <label class="input-label">پێشکەوتن ٢ (Premise 2)</label>
+            <input class="inp" id="prem2" placeholder="p" value="p">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="calcInference()">🔎 دەرستکردن (Modus Ponens)</button>
+        <div id="result-infer" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- LIMITS -->
+    <div id="page-limits" class="page">
+      <div class="page-header">
+        <h1>♾️ Limits — سنوور</h1>
+        <p>دۆزینەوەی سنووری فەنکشنەکان قەدەمەبەقەدەم</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>♾️</span> حساب کردنی Limit</div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchLimitTab('poly', this)">Polynomial</button>
+          <button class="tab" onclick="switchLimitTab('rational', this)">Rational</button>
+          <button class="tab" onclick="switchLimitTab('inf', this)">Infinity</button>
+          <button class="tab" onclick="switchLimitTab('lhopital', this)">L'Hôpital</button>
+        </div>
+
+        <div id="limit-poly">
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">هاوکێشە (بەکاربێن: x^2, 3x, 5 و هتد)</label>
+              <input class="inp" id="limitExprPoly" placeholder="x^2 + 3x - 4" value="x^2 + 3x - 4" style="direction:ltr;">
+            </div>
+            <div class="input-group">
+              <label class="input-label">x نزیکدەبێتەوە بۆ</label>
+              <input class="inp" id="limitAtPoly" placeholder="2" value="2">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcLimitPoly()">حساب بکە</button>
+        </div>
+
+        <div id="limit-rational" style="display:none;">
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">خستەوەی سەرەوە (Numerator)</label>
+              <input class="inp" id="limNumR" placeholder="x^2 - 4" value="x^2 - 4">
+            </div>
+            <div class="input-group">
+              <label class="input-label">خستەوەی خوارەوە (Denominator)</label>
+              <input class="inp" id="limDenR" placeholder="x - 2" value="x - 2">
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">x نزیکدەبێتەوە بۆ</label>
+            <input class="inp" id="limAtR" placeholder="2" value="2">
+          </div>
+          <button class="btn btn-primary" onclick="calcLimitRational()">حساب بکە</button>
+        </div>
+
+        <div id="limit-inf" style="display:none;">
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">خستەوەی سەرەوە</label>
+              <input class="inp" id="limNumInf" placeholder="3x^2 + 2x" value="3x^2 + 2x">
+            </div>
+            <div class="input-group">
+              <label class="input-label">خستەوەی خوارەوە</label>
+              <input class="inp" id="limDenInf" placeholder="x^2 - 1" value="x^2 - 1">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcLimitInf()">حساب بکە (x → ∞)</button>
+        </div>
+
+        <div id="limit-lhopital" style="display:none;">
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">خستەوەی سەرەوە</label>
+              <input class="inp" id="limNumL" placeholder="x^2 - 1" value="x^2 - 1">
+            </div>
+            <div class="input-group">
+              <label class="input-label">خستەوەی خوارەوە</label>
+              <input class="inp" id="limDenL" placeholder="x - 1" value="x - 1">
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">x نزیکدەبێتەوە بۆ</label>
+            <input class="inp" id="limAtL" placeholder="1" value="1">
+          </div>
+          <button class="btn btn-primary" onclick="calcLimitLhopital()">حساب بکە (L'Hôpital)</button>
+        </div>
+
+        <div id="result-limits" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- SEQUENCES -->
+    <div id="page-sequences" class="page">
+      <div class="page-header">
+        <h1>🔢 Sequences — رێزی ژمارەیی</h1>
+        <p>رێزی ئەریسمێتیکی و جیۆمێتریکی — دۆزینەوەی تەرمی n و کۆبوون</p>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" onclick="switchSeqTab('ap',this)">Arithmetic (AP)</button>
+          <button class="tab" onclick="switchSeqTab('gp',this)">Geometric (GP)</button>
+          <button class="tab" onclick="switchSeqTab('recur',this)">Recursive</button>
+          <button class="tab" onclick="switchSeqTab('fib',this)">Fibonacci</button>
+        </div>
+
+        <div id="seq-ap">
+          <div class="card-title"><span>🔢</span> رێزی ئەریسمێتیکی — AP</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم (a₁)</label>
+              <input class="inp" id="apA1" placeholder="2" value="2">
+            </div>
+            <div class="input-group">
+              <label class="input-label">جیاوازی باوەکە (d)</label>
+              <input class="inp" id="apD" placeholder="3" value="3">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی تەرمەکان (n)</label>
+              <input class="inp" id="apN" placeholder="10" value="10">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcAP()">حساب بکە</button>
+        </div>
+
+        <div id="seq-gp" style="display:none;">
+          <div class="card-title"><span>🔢</span> رێزی جیۆمێتریکی — GP</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم (a₁)</label>
+              <input class="inp" id="gpA1" placeholder="3" value="3">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ڕێژەی باوەکە (r)</label>
+              <input class="inp" id="gpR" placeholder="2" value="2">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی تەرمەکان (n)</label>
+              <input class="inp" id="gpN" placeholder="8" value="8">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcGP()">حساب بکە</button>
+        </div>
+
+        <div id="seq-recur" style="display:none;">
+          <div class="card-title"><span>🔢</span> رێزی بازگەشتی — Recursive</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم a(1)</label>
+              <input class="inp" id="recA1" placeholder="1" value="1">
+            </div>
+            <div class="input-group">
+              <label class="input-label">n دەمەوێت تا چەند بزانم</label>
+              <input class="inp" id="recN" placeholder="8" value="8">
+            </div>
+          </div>
+          <div class="input-group">
+            <label class="input-label">رووکەی بازگەشتی — a(n) = (بەرپرسی a(n-1) بنووسە)</label>
+            <input class="inp" id="recRule" placeholder="2 * prev + 1" value="2 * prev + 1" style="direction:ltr;">
+            <small style="color:var(--text3); font-size:11px; margin-top:4px; display:block;">prev = a(n-1), n = ئەو ژمارەیە. نموونە: prev + 3, 2 * prev, prev * prev - 1</small>
+          </div>
+          <button class="btn btn-primary" onclick="calcRecur()">حساب بکە</button>
+        </div>
+
+        <div id="seq-fib" style="display:none;">
+          <div class="card-title"><span>🌀</span> رێزی فیبۆناچی — Fibonacci</div>
+          <div class="input-group">
+            <label class="input-label">چەند تەرم دەمەوێت؟</label>
+            <input class="inp" id="fibN" placeholder="15" value="15">
+          </div>
+          <button class="btn btn-primary" onclick="calcFib()">حساب بکە</button>
+        </div>
+
+        <div id="result-sequences" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- SERIES -->
+    <div id="page-series" class="page">
+      <div class="page-header">
+        <h1>∑ Series — ڕیژ</div>
+        <p>کۆکردنی ڕیژ بۆ ئەریسمێتیکی، جیۆمێتریکی، و ڕیژی بێدواداچوون</p>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" onclick="switchSeriesTab('aps',this)">AP Series</button>
+          <button class="tab" onclick="switchSeriesTab('gps',this)">GP Series</button>
+          <button class="tab" onclick="switchSeriesTab('ginf',this)">∞ GP Series</button>
+          <button class="tab" onclick="switchSeriesTab('custom',this)">Custom Σ</button>
+        </div>
+
+        <div id="series-aps">
+          <div class="card-title"><span>∑</span> کۆی AP Series</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم a₁</label>
+              <input class="inp" id="sApA" placeholder="1" value="1">
+            </div>
+            <div class="input-group">
+              <label class="input-label">جیاوازی d</label>
+              <input class="inp" id="sApD" placeholder="2" value="2">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی تەرمەکان n</label>
+              <input class="inp" id="sApN" placeholder="10" value="10">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcAPSeries()">کۆ دەربیاری</button>
+        </div>
+
+        <div id="series-gps" style="display:none;">
+          <div class="card-title"><span>∑</span> کۆی GP Series</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم a₁</label>
+              <input class="inp" id="sGpA" placeholder="2" value="2">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ڕێژە r</label>
+              <input class="inp" id="sGpR" placeholder="3" value="3">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی تەرمەکان n</label>
+              <input class="inp" id="sGpN" placeholder="6" value="6">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcGPSeries()">کۆ دەربیاری</button>
+        </div>
+
+        <div id="series-ginf" style="display:none;">
+          <div class="card-title"><span>∞</span> کۆی GP بێدواداچوون (|r| &lt; 1)</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">تەرمی یەکەم a</label>
+              <input class="inp" id="sGinfA" placeholder="4" value="4">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ڕێژە r (دەبێت |r| &lt; 1 بێت)</label>
+              <input class="inp" id="sGinfR" placeholder="0.5" value="0.5">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcGPInf()">کۆ دەربیاری</button>
+        </div>
+
+        <div id="series-custom" style="display:none;">
+          <div class="card-title"><span>Σ</span> کۆی دیاریکراو</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">فۆرموولا (بەکاربێن n)</label>
+              <input class="inp" id="sCustF" placeholder="n^2" value="n^2" style="direction:ltr;">
+            </div>
+            <div class="input-group">
+              <label class="input-label">لە n =</label>
+              <input class="inp" id="sCustFrom" placeholder="1" value="1">
+            </div>
+            <div class="input-group">
+              <label class="input-label">تا n =</label>
+              <input class="inp" id="sCustTo" placeholder="10" value="10">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcCustomSeries()">Σ حساب بکە</button>
+        </div>
+
+        <div id="result-series" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- GRAPH THEORY -->
+    <div id="page-graphs" class="page">
+      <div class="page-header">
+        <h1>🕸️ Graph Theory — تیۆری گراف</h1>
+        <p>شیکردنەوەی گراف، درجەکان، دەوروبەر، پەیوەندی و دەرخستنی دیاگرام</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><span>🕸️</span> داخڵکردنی گراف</div>
+        <div class="input-group">
+          <label class="input-label">کناڕەکان (Edges) — هەر کناڕێک لەسەر هێڵێک: A-B یان A-B:4 (بۆ واتەدار)</label>
+          <textarea class="inp" id="graphEdges" style="direction:ltr; font-family:'JetBrains Mono',monospace; font-size:13px;">A-B
+A-C
+B-C
+B-D
+C-D
+D-E</textarea>
+        </div>
+        <div class="two-col">
+          <div>
+            <label class="input-label">جۆری گراف</label>
+            <div style="display:flex; gap:8px; margin-top:4px;">
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text2); font-size:13px;">
+                <input type="radio" name="graphDir" value="undirected" checked style="accent-color:var(--accent);"> بێئاراستەکراو
+              </label>
+              <label style="display:flex; align-items:center; gap:6px; cursor:pointer; color:var(--text2); font-size:13px;">
+                <input type="radio" name="graphDir" value="directed"> ئاراستەکراو
+              </label>
+            </div>
+          </div>
+        </div>
+        <br>
+        <button class="btn btn-primary" onclick="analyzeGraph()">🔎 شیکردنەوەی گراف</button>
+        <div id="result-graph" class="result-box">
+          <div class="result-title">📊 ئەنجام</div>
+          <div id="graph-info"></div>
+          <canvas id="graphCanvas" width="580" height="340" style="margin-top:16px; max-width:100%;"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- COUNTING -->
+    <div id="page-counting" class="page">
+      <div class="page-header">
+        <h1>🎲 Counting — ژماردن</h1>
+        <p>Permutation, Combination, Factorial, Pigeonhole Principle</p>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" onclick="switchCountTab('perm',this)">Permutation</button>
+          <button class="tab" onclick="switchCountTab('comb',this)">Combination</button>
+          <button class="tab" onclick="switchCountTab('fact',this)">Factorial</button>
+          <button class="tab" onclick="switchCountTab('pig',this)">Pigeonhole</button>
+          <button class="tab" onclick="switchCountTab('incexc',this)">Inc-Exc</button>
+        </div>
+
+        <div id="count-perm">
+          <div class="card-title"><span>🎲</span> Permutation — P(n,r)</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">n (کۆی ئەلەمەنتەکان)</label>
+              <input class="inp" id="permN" placeholder="7" value="7">
+            </div>
+            <div class="input-group">
+              <label class="input-label">r (دەمەوێت چەند هەڵبژێریم)</label>
+              <input class="inp" id="permR" placeholder="3" value="3">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcPerm()">حساب بکە</button>
+        </div>
+
+        <div id="count-comb" style="display:none;">
+          <div class="card-title"><span>🎲</span> Combination — C(n,r)</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">n</label>
+              <input class="inp" id="combN" placeholder="10" value="10">
+            </div>
+            <div class="input-group">
+              <label class="input-label">r</label>
+              <input class="inp" id="combR" placeholder="4" value="4">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcComb()">حساب بکە</button>
+        </div>
+
+        <div id="count-fact" style="display:none;">
+          <div class="card-title"><span>!</span> Factorial</div>
+          <div class="input-group">
+            <label class="input-label">n (n! حساب بکە)</label>
+            <input class="inp" id="factN" placeholder="10" value="10">
+          </div>
+          <button class="btn btn-primary" onclick="calcFactorial()">حساب بکە</button>
+        </div>
+
+        <div id="count-pig" style="display:none;">
+          <div class="card-title"><span>🐦</span> Pigeonhole Principle</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">ژمارەی بابەتەکان (Objects)</label>
+              <input class="inp" id="pigObj" placeholder="13" value="13">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی قوتووچەکان (Boxes)</label>
+              <input class="inp" id="pigBox" placeholder="12" value="12">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcPigeonhole()">حساب بکە</button>
+        </div>
+
+        <div id="count-incexc" style="display:none;">
+          <div class="card-title"><span>🔀</span> Inclusion-Exclusion Principle</div>
+          <div class="three-col">
+            <div class="input-group">
+              <label class="input-label">|A|</label>
+              <input class="inp" id="ieA" placeholder="30" value="30">
+            </div>
+            <div class="input-group">
+              <label class="input-label">|B|</label>
+              <input class="inp" id="ieB" placeholder="25" value="25">
+            </div>
+            <div class="input-group">
+              <label class="input-label">|A ∩ B|</label>
+              <input class="inp" id="ieAB" placeholder="10" value="10">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcIncExc()">حساب بکە</button>
+        </div>
+
+        <div id="result-counting" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- BINARY -->
+    <div id="page-binary" class="page">
+      <div class="page-header">
+        <h1>💻 Binary System — سیستەمی باینری</h1>
+        <p>گۆڕینی ژمارەکان لە دیسمالەوە بۆ باینری و بەرعەکس، زیادکردن، کەمکردن لە باینری</p>
+      </div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" onclick="switchBinTab('d2b',this)">Decimal → Binary</button>
+          <button class="tab" onclick="switchBinTab('b2d',this)">Binary → Decimal</button>
+          <button class="tab" onclick="switchBinTab('badd',this)">Binary +</button>
+          <button class="tab" onclick="switchBinTab('bsub',this)">Binary -</button>
+          <button class="tab" onclick="switchBinTab('multi',this)">Multi-Base</button>
+        </div>
+
+        <div id="bin-d2b">
+          <div class="card-title"><span>➡️</span> دیسمال بۆ باینری</div>
+          <div class="input-group">
+            <label class="input-label">ژمارەی دیسمال داخڵ بکە</label>
+            <input class="inp" id="decToBin" placeholder="156" value="156">
+          </div>
+          <button class="btn btn-primary" onclick="calcDecToBin()">گۆڕین</button>
+        </div>
+
+        <div id="bin-b2d" style="display:none;">
+          <div class="card-title"><span>⬅️</span> باینری بۆ دیسمال</div>
+          <div class="input-group">
+            <label class="input-label">ژمارەی باینری داخڵ بکە</label>
+            <input class="inp" id="binToDec" placeholder="10011100" value="10011100" style="direction:ltr; letter-spacing:2px;">
+          </div>
+          <button class="btn btn-primary" onclick="calcBinToDec()">گۆڕین</button>
+        </div>
+
+        <div id="bin-badd" style="display:none;">
+          <div class="card-title"><span>➕</span> زیادکردنی باینری</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">ژمارەی باینریی یەکەم</label>
+              <input class="inp" id="binAdd1" placeholder="1011" value="1011" style="direction:ltr; letter-spacing:2px;">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی باینریی دووەم</label>
+              <input class="inp" id="binAdd2" placeholder="1101" value="1101" style="direction:ltr; letter-spacing:2px;">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcBinAdd()">زیادبکە</button>
+        </div>
+
+        <div id="bin-bsub" style="display:none;">
+          <div class="card-title"><span>➖</span> کەمکردنی باینری</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">ژمارەی باینریی یەکەم (گەورەتر)</label>
+              <input class="inp" id="binSub1" placeholder="1101" value="1101" style="direction:ltr; letter-spacing:2px;">
+            </div>
+            <div class="input-group">
+              <label class="input-label">ژمارەی باینریی دووەم</label>
+              <input class="inp" id="binSub2" placeholder="0110" value="0110" style="direction:ltr; letter-spacing:2px;">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcBinSub()">کەمبکە</button>
+        </div>
+
+        <div id="bin-multi" style="display:none;">
+          <div class="card-title"><span>🔢</span> گۆڕینی بنەماییەکان (Multi-Base)</div>
+          <div class="two-col">
+            <div class="input-group">
+              <label class="input-label">ژمارەی داخڵکراو</label>
+              <input class="inp" id="multiNum" placeholder="255" value="255" style="direction:ltr;">
+            </div>
+            <div class="input-group">
+              <label class="input-label">بنەمای داخڵکراو (From Base)</label>
+              <input class="inp" id="multiFrom" placeholder="10" value="10">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="calcMultiBase()">گۆڕین بۆ هەموو بنەمایەکان</button>
+        </div>
+
+        <div id="result-binary" class="result-box"></div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="notif" class="notif"></div>
+
+<script>
+// ========================================
+// PAGE NAVIGATION
+// ========================================
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(b => { if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + name + "'")) b.classList.add('active'); });
+}
+
+function showResult(id, html) {
+  const el = document.getElementById(id);
+  el.innerHTML = html;
+  el.classList.add('show');
+}
+
+function step(num, title, content, math='') {
+  return `<div class="step">
+    <div class="step-num">${num}</div>
+    <div class="step-title">${title}</div>
+    <div class="step-content">${content}</div>
+    ${math ? `<div class="step-math">${math}</div>` : ''}
+  </div>`;
+}
+
+function answer(label, value) {
+  return `<div class="final-answer">
+    <div class="fa-label">✅ وەڵامی کۆتایی — ${label}</div>
+    <div class="fa-value">${value}</div>
+  </div>`;
+}
+
+function errBox(msg) {
+  return `<div class="error-box">❌ هەڵە: ${msg}</div>`;
+}
+
+// ========================================
+// SET THEORY
+// ========================================
+function parseSet(str) {
+  return [...new Set(str.split(',').map(s => s.trim()).filter(s=>s!=='').map(s => isNaN(s)?s:Number(s)))];
+}
+
+function calcSet(op) {
+  const A = parseSet(document.getElementById('setA').value);
+  const B = parseSet(document.getElementById('setB').value);
+  const U = parseSet(document.getElementById('setU').value);
+  let html = `<div class="result-title">📊 ئەنجامی ${op.toUpperCase()}</div>`;
+  html += step(1,'داخڵکراوەکان','کۆمەڵەکان ئامادەی شیکردنەوەن:',`A = {${A.join(', ')}} ، |A| = ${A.length}\nB = {${B.join(', ')}} ، |B| = ${B.length}${U.length?`\nU = {${U.join(', ')}} ، |U| = ${U.length}`:''}` );
+
+  if(op==='union'){
+    const res=[...new Set([...A,...B])].sort((a,b)=>a-b);
+    html+=step(2,'یەکێتی — Union','هەر ئەلەمەنتێک کە لە A یان B دایە پێناسەمان دەکات.',`A ∪ B = A + B - (A ∩ B) = {${res.join(', ')}}`);
+    html+=step(3,'ئەلەمەنتەکان بڕیارێ','ئەلەمەنتەکانی هاوبەش دوویەکجار ناژمێردرێنەوە.',`|A ∪ B| = |A| + |B| - |A ∩ B| = ${A.length} + ${B.length} - ${A.filter(x=>B.includes(x)).length} = ${res.length}`);
+    html+=answer('A ∪ B',`{${res.join(', ')}}`);
+  } else if(op==='inter'){
+    const res=A.filter(x=>B.includes(x));
+    html+=step(2,'بڕکردن — Intersection','ئەلەمەنتەکانی هاوبەش لە هەردوو A و B.',`A ∩ B = {${res.join(', ')}}`);
+    html+=step(3,'ژمارەی هاوبەشەکان',`|A ∩ B| = ${res.length} ئەلەمەنت`,`هاوبەشەکان: ${res.length>0?res.join(', '):'پووچەڵ (∅)'}`);
+    html+=answer('A ∩ B',res.length?`{${res.join(', ')}}`:'∅ (پووچەڵ)');
+  } else if(op==='diff'){
+    const res=A.filter(x=>!B.includes(x));
+    html+=step(2,'جیاوازی — Difference','ئەلەمەنتەکانی A کە لە B نەبن.',`A - B = {${res.join(', ')}}`);
+    html+=step(3,'رووندکردنەوە',`ئەلەمەنتەکانی A کە B تێیانداناوە: ${res.join(', ')||'هیچ'}`,`|A-B| = ${res.length}`);
+    html+=answer('A - B',res.length?`{${res.join(', ')}}`:'∅');
+  } else if(op==='sym'){
+    const res=[...A.filter(x=>!B.includes(x)),...B.filter(x=>!A.includes(x))].sort((a,b)=>a-b);
+    html+=step(2,'جیاوازیی هاوتای — Symmetric Difference','ئەلەمەنتەکانی A-B و B-A کۆبکەرەوە.',`A △ B = (A-B) ∪ (B-A)`);
+    html+=step(3,'حساب',`A-B = {${A.filter(x=>!B.includes(x)).join(', ')||'∅'}} ، B-A = {${B.filter(x=>!A.includes(x)).join(', ')||'∅'}}`,`A △ B = {${res.join(', ')}}`);
+    html+=answer('A △ B',res.length?`{${res.join(', ')}}`:'∅');
+  } else if(op==='comp'){
+    if(!U.length){html+=errBox('پێویستت بە Universal Set U هەیە!');showResult('result-sets',html);return;}
+    const res=U.filter(x=>!A.includes(x));
+    html+=step(2,"پووچەڵکاری — Complement","ئەلەمەنتەکانی U کە لە A نەبن.",`A' = U - A`);
+    html+=step(3,'حساب',`U - A = هەموو ئەلەمەنتەکانی U کە A تێیانداناوە`,`A' = {${res.join(', ')}}, |A'| = ${res.length}`);
+    html+=answer("A'",res.length?`{${res.join(', ')}}`:'∅');
+  } else if(op==='power'){
+    if(A.length>6){html+=errBox('بۆ Power Set تکایە 6 ئەلەمەنت یان کەمتر بەکاربێنە');showResult('result-sets',html);return;}
+    const ps=[];
+    for(let i=0;i<(1<<A.length);i++){
+      const sub=[];
+      for(let j=0;j<A.length;j++) if(i>>j&1) sub.push(A[j]);
+      ps.push(sub);
+    }
+    html+=step(2,'کۆمەڵەی تۆخم — Power Set',`|A| = ${A.length} بۆیە |P(A)| = 2^${A.length} = ${ps.length}`,`P(A) دەگرێتەوە ${ps.length} کۆمەڵەی ژیر`);
+    html+=step(3,'هەموو ژیرکۆمەڵەکان',ps.map(s=>`{${s.join(',')||'∅'}}`).join(' , '),'');
+    html+=answer('|P(A)|',`2^${A.length} = ${ps.length} ژیرکۆمەڵە`);
+  } else if(op==='cart'){
+    if(A.length>5||B.length>5){html+=errBox('بۆ Cartesian Product تکایە 5 ئەلەمەنت یان کەمتر');showResult('result-sets',html);return;}
+    const cp=[];
+    A.forEach(a=>B.forEach(b=>cp.push(`(${a},${b})`)));
+    html+=step(2,'زیادکاریی دیکارتی — Cartesian Product',`|A×B| = |A| × |B| = ${A.length} × ${B.length} = ${cp.length}`,`A × B = { ${cp.join(', ')} }`);
+    html+=answer('A × B',`|A×B| = ${cp.length}`);
+  } else if(op==='subset'){
+    const subs=[];
+    for(let i=0;i<(1<<A.length)&&i<64;i++){
+      const sub=[];
+      for(let j=0;j<A.length;j++) if(i>>j&1) sub.push(A[j]);
+      subs.push(sub);
+    }
+    html+=step(2,'ژیرکۆمەڵەکان','هەموو ژیرکۆمەڵەکانی A دەرئەنجام دەدرێن.',`|A| = ${A.length} → ${subs.length} ژیرکۆمەڵە`);
+    html+=step(3,'لیستی ژیرکۆمەڵەکان',subs.map((s,i)=>`P${i}: {${s.join(',')||'∅'}}`).join(' | '),'');
+    html+=answer('ژمارەی ژیرکۆمەڵەکان',`2^${A.length} = ${subs.length}`);
+  }
+  showResult('result-sets',html);
+}
+
+// ========================================
+// LOGIC
+// ========================================
+function parseLogicExpr(expr, vals) {
+  let e = expr.toUpperCase()
+    .replace(/\bAND\b/g,'&&').replace(/\bOR\b/g,'||').replace(/\bNOT\b/g,'!')
+    .replace(/\bXOR\b/g,'!==').replace(/\bNAND\b/g,'&&!')
+    .replace(/\bNOR\b/g,'||!')
+    .replace(/\bIMPLIES\b/g,'<=')
+    .replace(/\bIFF\b/g,'===');
+  for(const[k,v] of Object.entries(vals)) e=e.replace(new RegExp('\\b'+k+'\\b','g'),v?'true':'false');
+  try{ return !!eval(e); } catch(ex){ return null; }
+}
+
+function getVars(expr){
+  return [...new Set(expr.toUpperCase().match(/\b[A-Z]\b/g)||[])].sort();
+}
+
+function calcLogic(){
+  const expr=document.getElementById('logicExpr').value;
+  const vars=getVars(expr);
+  if(vars.length===0||vars.length>4){showResult('result-logic',errBox('تکایە 1-4 گۆڕاو بەکاربێنە (p, q, r, s)'));return;}
+  const rows=[];
+  for(let i=0;i<(1<<vars.length);i++){
+    const vals={};
+    vars.forEach((v,j)=>{ vals[v]=!!(i>>(vars.length-1-j)&1); });
+    rows.push({...vals, result:parseLogicExpr(expr,vals)});
+  }
+  let html=`<div class="result-title">📊 جەدوەلی ڕاستی</div>`;
+  html+=step(1,'ناسینەوەی گۆڕاوەکان',`گۆڕاوەکان: ${vars.join(', ')} — هاوکێشە: ${expr}`,`کۆی ڕیزەکان: 2^${vars.length} = ${rows.length}`);
+  html+=step(2,'ئامادەکردنی جەدوەل','ئەمەی خوارەوە جەدوەلی ڕاستیی تەواوی فۆرموولاکەیە:','');
+  let table=`<table><tr>${vars.map(v=>`<th>${v}</th>`).join('')}<th>${expr}</th></tr>`;
+  rows.forEach(row=>{
+    table+=`<tr>${vars.map(v=>`<td><span class="badge ${row[v]?'badge-true':'badge-false'}">${row[v]?'T':'F'}</span></td>`).join('')}<td><span class="badge ${row.result?'badge-true':'badge-false'}">${row.result?'T':'F'}</span></td></tr>`;
+  });
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  const trues=rows.filter(r=>r.result).length;
+  const type=trues===rows.length?'Tautology ✅':trues===0?'Contradiction ❌':'Contingency ⚡';
+  html+=step(3,'جۆری فۆرموولا',`${trues} ڕیز ڕاستن لە ${rows.length} ڕیز — فۆرموولا: ${type}`,'');
+  html+=answer('جۆری فۆرموولا',type);
+  showResult('result-logic',html);
+}
+
+function calcInference(){
+  const p1=document.getElementById('prem1').value;
+  const p2=document.getElementById('prem2').value;
+  let html=`<div class="result-title">🔎 شیکردنەوەی دەرئەنجام</div>`;
+  html+=step(1,'پێشکەوتنەکان',`پێشکەوتن ١: ${p1}<br>پێشکەوتن ٢: ${p2}`,'Modus Ponens: p → q, p ∴ q');
+  const vars=getVars(p1+' '+p2);
+  const rows=[];
+  for(let i=0;i<(1<<vars.length);i++){
+    const vals={};
+    vars.forEach((v,j)=>vals[v]=!!(i>>(vars.length-1-j)&1));
+    const r1=parseLogicExpr(p1,vals), r2=parseLogicExpr(p2,vals);
+    rows.push({...vals,r1,r2,both:r1&&r2});
+  }
+  const concRows=rows.filter(r=>r.both);
+  html+=step(2,'جەدوەلی ڕاستی',`کاتێک هەردوو پێشکەوتن ڕاستن: ${concRows.length} بار`,'');
+  let table=`<table><tr>${vars.map(v=>`<th>${v}</th>`).join('')}<th>P1</th><th>P2</th><th>هەردوو</th></tr>`;
+  rows.forEach(row=>{
+    table+=`<tr>${vars.map(v=>`<td><span class="badge ${row[v]?'badge-true':'badge-false'}">${row[v]?'T':'F'}</span></td>`).join('')}<td><span class="badge ${row.r1?'badge-true':'badge-false'}">${row.r1?'T':'F'}</span></td><td><span class="badge ${row.r2?'badge-true':'badge-false'}">${row.r2?'T':'F'}</span></td><td><span class="badge ${row.both?'badge-true':'badge-false'}">${row.both?'✓':'✗'}</span></td></tr>`;
+  });
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  html+=answer('دەرئەنجام',concRows.length>0?'دەرئەنجام هەیە — پێشکەوتنەکان یەکگرتوون':'پێشکەوتنەکان نابنەیەک');
+  showResult('result-infer',html);
+}
+
+// ========================================
+// LIMITS
+// ========================================
+function switchLimitTab(name,btn){
+  ['poly','rational','inf','lhopital'].forEach(t=>{
+    document.getElementById('limit-'+t).style.display='none';
+  });
+  document.getElementById('limit-'+name).style.display='block';
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function evalPoly(expr, x){
+  let e=expr.replace(/\^/g,'**').replace(/(\d)(x)/g,'$1*$2').replace(/x/g,String(x));
+  try{return eval(e);}catch(ex){return NaN;}
+}
+
+function diffSimple(expr){ // simple polynomial derivative
+  // Returns derivative as string for display
+  const terms=expr.toLowerCase().split(/(?=[+-])/);
+  let result=[];
+  terms.forEach(t=>{
+    t=t.trim();
+    if(!t) return;
+    const xIdx=t.indexOf('x');
+    if(xIdx===-1){result.push('0');return;}
+    const powIdx=t.indexOf('^');
+    let coef=1, pow=1;
+    if(xIdx>0){const c=t.slice(0,xIdx).replace(/\s/g,''); coef=c===''||c==='+'?1:c==='-'?-1:Number(c);}
+    if(powIdx!==-1) pow=Number(t.slice(powIdx+1));
+    const newCoef=coef*pow; const newPow=pow-1;
+    if(newPow===0) result.push(String(newCoef));
+    else if(newPow===1) result.push(newCoef===1?'x':newCoef===-1?'-x':`${newCoef}x`);
+    else result.push(`${newCoef}x^${newPow}`);
+  });
+  return result.filter(r=>r!=='0').join(' + ').replace(/\+ -/g,'- ') || '0';
+}
+
+function calcLimitPoly(){
+  const expr=document.getElementById('limitExprPoly').value;
+  const a=Number(document.getElementById('limitAtPoly').value);
+  const val=evalPoly(expr,a);
+  let html=`<div class="result-title">♾️ سنووری Polynomial</div>`;
+  html+=step(1,'ناسینەوە',`بمانەوێت دۆزینەوەی: lim[x→${a}] (${expr})`,`هاوکێشە: f(x) = ${expr}`);
+  html+=step(2,'جێگەی x',`جێگای x = ${a} بکەرەوە لە f(x)`,`f(${a}) = ${expr.replace(/x/g,`(${a})`)} = ${val}`);
+  html+=step(3,'دەرئەنجام',isNaN(val)?'سنووری تایبەت دەبێت (∞ یان پووچەڵ)':`سنوورەکە هەیە و بریتییە لە ${val}`,`lim[x→${a}] f(x) = ${isNaN(val)?'تایبەت':val}`);
+  html+=answer(`lim[x→${a}] (${expr})`,isNaN(val)?'تایبەت / هەڵەی داخڵ':val);
+  showResult('result-limits',html);
+}
+
+function calcLimitRational(){
+  const num=document.getElementById('limNumR').value;
+  const den=document.getElementById('limDenR').value;
+  const a=Number(document.getElementById('limAtR').value);
+  const n0=evalPoly(num,a), d0=evalPoly(den,a);
+  let html=`<div class="result-title">♾️ سنووری Rational Function</div>`;
+  html+=step(1,'ناسینەوە',`lim[x→${a}] (${num}) / (${den})`,`خستەوەی سەرەوە: ${num} | خستەوەی خوارەوە: ${den}`);
+  html+=step(2,'جێگەی ڕاستەوخۆ',`جێگای x = ${a} بکەرەوە`,`سەرەوە: ${n0} | خوارەوە: ${d0}`);
+  if(d0!==0){
+    const val=n0/d0;
+    html+=step(3,'دەرئەنجام','جێگاکردنی ڕاستەوخۆ کار دەکات!',`${n0} / ${d0} = ${val}`);
+    html+=answer('سنوورەکە',val);
+  } else if(n0===0&&d0===0){
+    html+=step(3,'شێوازی 0/0','پێویستە فاکتۆرکردن بکەین یان L\'Hôpital بەکاربێنین','0/0 → فاکتۆرکردن پێویستە');
+    html+=step(4,'L\'Hôpital',`d/dx (${num}) / d/dx (${den})`,`مشتمال بکە يان tab L'Hôpital بەکاربێنە`);
+    html+=answer('شێوازی كۆتایی','0/0 → L\'Hôpital یان فاکتۆرکردن پێویستە');
+  } else {
+    const sign=n0>0?'+∞':'-∞';
+    html+=step(3,'سنووری بێدواداچوون',`خوارەوە = 0، سەرەوە ≠ 0 → ${sign}`,`${n0} / 0 → ${sign}`);
+    html+=answer('سنوورەکە',sign);
+  }
+  showResult('result-limits',html);
+}
+
+function calcLimitInf(){
+  const num=document.getElementById('limNumInf').value;
+  const den=document.getElementById('limDenInf').value;
+  function leadDeg(expr){
+    const ms=[...expr.matchAll(/(\d*\.?\d*)\s*\*?\s*x\s*\^?\s*(\d*)/gi)];
+    let maxP=-Infinity,maxC=0;
+    ms.forEach(m=>{
+      const c=m[1]===''||m[1]==='+'?1:m[1]==='-'?-1:parseFloat(m[1]);
+      const p=m[2]===''?1:parseInt(m[2]);
+      if(p>maxP){maxP=p;maxC=c;}
+    });
+    if(maxP===-Infinity){const consts=expr.match(/^[+-]?\d+$/);if(consts){return{p:0,c:Number(consts[0])};}}
+    return{p:maxP,c:maxC};
+  }
+  const {p:pn,c:cn}=leadDeg(num);
+  const {p:pd,c:cd}=leadDeg(den);
+  let html=`<div class="result-title">♾️ سنووری x → ∞</div>`;
+  html+=step(1,'ناسینەوە',`lim[x→∞] (${num}) / (${den})`,`درجەی سەرەوە: ${pn} | درجەی خوارەوە: ${pd}`);
+  html+=step(2,'بەراوردکردنی درجەکان',`پێویستە درجەی زۆرترینی x بەراوردبکرێن`,`سەرەوە: درجە ${pn} | خوارەوە: درجە ${pd}`);
+  let res,explain;
+  if(pn<pd){res='0';explain='درجەی سەرەوە کەمترە → سنوور = 0';}
+  else if(pn===pd){res=String(cn/cd);explain=`درجەکان یەکسانن → سنوور = کۆیفشیانتی پێشەوە = ${cn}/${cd} = ${cn/cd}`;}
+  else{res='∞';explain='درجەی سەرەوە زیاترە → سنوور = ±∞';}
+  html+=step(3,'دەرئەنجام',explain,`lim[x→∞] = ${res}`);
+  html+=answer('سنوورەکە',res);
+  showResult('result-limits',html);
+}
+
+function calcLimitLhopital(){
+  const num=document.getElementById('limNumL').value;
+  const den=document.getElementById('limDenL').value;
+  const a=Number(document.getElementById('limAtL').value);
+  const n0=evalPoly(num,a), d0=evalPoly(den,a);
+  let html=`<div class="result-title">♾️ L\'Hôpital\'s Rule</div>`;
+  html+=step(1,'ناسینەوە',`lim[x→${a}] (${num})/(${den})`,`جێگاکردن: سەرەوە=${n0}, خوارەوە=${d0}`);
+  if(!(n0===0&&d0===0)&&!(Math.abs(n0)===Infinity&&Math.abs(d0)===Infinity)){
+    html+=step(2,'سەرتایی','شێوازی 0/0 یان ∞/∞ نییە — پێویست نییە L\'Hôpital بەکاربێنی',`${n0}/${d0} → وەڵامی ڕاستەوخۆ = ${n0/d0}`);
+    html+=answer('سنوورەکە',String(n0/d0));
+  } else {
+    const dn=diffSimple(num), dd=diffSimple(den);
+    const n1=evalPoly(dn,a), d1=evalPoly(dd,a);
+    html+=step(2,'L\'Hôpital ئامادەکارییەکە',`مشتمالی سەرەوە: d/dx(${num}) = ${dn}\nمشتمالی خوارەوە: d/dx(${den}) = ${dd}`,'');
+    html+=step(3,'جێگاکردنی دووەم',`سەرەوە: ${dn} → ${n1} | خوارەوە: ${dd} → ${d1}`,`${n1} / ${d1} = ${d1!==0?n1/d1:'تایبەت'}`);
+    const final=d1!==0?n1/d1:'تایبەت';
+    html+=answer('سنوورەکە',String(final));
+  }
+  showResult('result-limits',html);
+}
+
+// ========================================
+// SEQUENCES
+// ========================================
+function switchSeqTab(name,btn){
+  ['ap','gp','recur','fib'].forEach(t=>document.getElementById('seq-'+t).style.display='none');
+  document.getElementById('seq-'+name).style.display='block';
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function calcAP(){
+  const a1=Number(document.getElementById('apA1').value);
+  const d=Number(document.getElementById('apD').value);
+  const n=Number(document.getElementById('apN').value);
+  if(n<1||n>50){showResult('result-sequences',errBox('n دەبێت لە 1 تا 50 بێت'));return;}
+  const an=a1+(n-1)*d;
+  const terms=[];
+  for(let i=1;i<=n;i++) terms.push(a1+(i-1)*d);
+  let html=`<div class="result-title">🔢 ئەنجامی AP</div>`;
+  html+=step(1,'فۆرموولا','رێزی ئەریسمێتیکی — Arithmetic Progression',`a(n) = a₁ + (n-1)·d`);
+  html+=step(2,'داناین','داناینی نرخەکان',`a₁ = ${a1}, d = ${d}, n = ${n}`);
+  html+=step(3,'حساب کردنی تەرمی n',`a(${n}) = ${a1} + (${n}-1) × ${d} = ${a1} + ${(n-1)*d} = ${an}`,`a(${n}) = ${an}`);
+  html+=step(4,'تەرم ١٠ی یەکەم',`{ ${terms.slice(0,Math.min(10,n)).join(', ')}${n>10?' , ...':''} }`,`|رێز| = ${n} تەرم`);
+  html+=answer(`تەرمی ${n}`,`a(${n}) = ${an}`);
+  showResult('result-sequences',html);
+}
+
+function calcGP(){
+  const a1=Number(document.getElementById('gpA1').value);
+  const r=Number(document.getElementById('gpR').value);
+  const n=Number(document.getElementById('gpN').value);
+  if(n<1||n>30){showResult('result-sequences',errBox('n دەبێت لە 1 تا 30 بێت'));return;}
+  const an=a1*Math.pow(r,n-1);
+  const terms=[];
+  for(let i=1;i<=n;i++) terms.push(+(a1*Math.pow(r,i-1)).toFixed(6));
+  let html=`<div class="result-title">🔢 ئەنجامی GP</div>`;
+  html+=step(1,'فۆرموولا','رێزی جیۆمێتریکی — Geometric Progression',`a(n) = a₁ × r^(n-1)`);
+  html+=step(2,'داناین',`a₁ = ${a1}, r = ${r}, n = ${n}`,`a(${n}) = ${a1} × ${r}^(${n}-1) = ${a1} × ${Math.pow(r,n-1).toFixed(4)}`);
+  html+=step(3,'دەرئەنجام',`a(${n}) = ${+an.toFixed(6)}`,`{ ${terms.slice(0,Math.min(8,n)).join(', ')}${n>8?' , ...':''} }`);
+  html+=answer(`تەرمی ${n}`,`a(${n}) = ${+an.toFixed(6)}`);
+  showResult('result-sequences',html);
+}
+
+function calcRecur(){
+  const a1=Number(document.getElementById('recA1').value);
+  const n=Number(document.getElementById('recN').value);
+  const rule=document.getElementById('recRule').value;
+  if(n<1||n>50){showResult('result-sequences',errBox('n دەبێت لە 1 تا 50 بێت'));return;}
+  const terms=[a1];
+  for(let i=2;i<=n;i++){
+    const prev=terms[terms.length-1];
+    try{terms.push(eval(rule));}catch(e){showResult('result-sequences',errBox('فۆرموولاکە هەڵەیە'));return;}
+  }
+  let html=`<div class="result-title">🔢 ئەنجامی رێزی بازگەشتی</div>`;
+  html+=step(1,'پێناسەی رووکە',`a(1) = ${a1}, a(n) = ${rule}`,`بازگەشت: کارکردن بەسەر تەرمی پێشوو`);
+  html+=step(2,'حسابکردنی تەرمەکان','قەدەمەبەقەدەم:',terms.map((t,i)=>`a(${i+1}) = ${t}`).join('\n'));
+  html+=answer(`تەرمی ${n}`,`a(${n}) = ${terms[n-1]}`);
+  showResult('result-sequences',html);
+}
+
+function calcFib(){
+  const n=Number(document.getElementById('fibN').value);
+  if(n<1||n>40){showResult('result-sequences',errBox('n دەبێت لە 1 تا 40 بێت'));return;}
+  const f=[1,1];
+  for(let i=2;i<n;i++) f.push(f[i-1]+f[i-2]);
+  let html=`<div class="result-title">🌀 ئەنجامی فیبۆناچی</div>`;
+  html+=step(1,'پێناسە','رێزی فیبۆناچی: هەر تەرمێک کۆی دوو تەرمی پێشووییەکان',`F(1)=1, F(2)=1, F(n)=F(n-1)+F(n-2)`);
+  html+=step(2,'حسابکردن',f.map((v,i)=>`F(${i+1})=${v}`).join(' | '),'');
+  html+=answer(`تەرمی ${n}`,`F(${n}) = ${f[n-1]}`);
+  showResult('result-sequences',html);
+}
+
+// ========================================
+// SERIES
+// ========================================
+function switchSeriesTab(name,btn){
+  ['aps','gps','ginf','custom'].forEach(t=>document.getElementById('series-'+t).style.display='none');
+  document.getElementById('series-'+name).style.display='block';
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function calcAPSeries(){
+  const a=Number(document.getElementById('sApA').value);
+  const d=Number(document.getElementById('sApD').value);
+  const n=Number(document.getElementById('sApN').value);
+  const an=a+(n-1)*d;
+  const s=n/2*(2*a+(n-1)*d);
+  const terms=[];
+  for(let i=1;i<=Math.min(n,6);i++) terms.push(a+(i-1)*d);
+  let html=`<div class="result-title">∑ کۆی AP Series</div>`;
+  html+=step(1,'فۆرموولا','کۆی AP Series',`Sₙ = n/2 × (2a + (n-1)d) = n/2 × (a₁ + aₙ)`);
+  html+=step(2,'داناین',`a = ${a}, d = ${d}, n = ${n}, a(n) = ${an}`,`رێز: ${terms.join(' + ')}${n>6?' + ...':''}`);
+  html+=step(3,'حساب',`Sₙ = ${n}/2 × (2×${a} + (${n}-1)×${d}) = ${n}/2 × (${2*a+(n-1)*d}) = ${s}`,`Sₙ = ${s}`);
+  html+=answer(`S(${n})`,s);
+  showResult('result-series',html);
+}
+
+function calcGPSeries(){
+  const a=Number(document.getElementById('sGpA').value);
+  const r=Number(document.getElementById('sGpR').value);
+  const n=Number(document.getElementById('sGpN').value);
+  let s,formula;
+  if(r===1){s=a*n;formula='r=1 بۆیە Sₙ = a×n';}
+  else{s=a*(Math.pow(r,n)-1)/(r-1);formula=`Sₙ = a(rⁿ-1)/(r-1)`;}
+  const terms=[];
+  for(let i=0;i<Math.min(n,5);i++) terms.push(+(a*Math.pow(r,i)).toFixed(4));
+  let html=`<div class="result-title">∑ کۆی GP Series</div>`;
+  html+=step(1,'فۆرموولا','کۆی GP Series',formula);
+  html+=step(2,'داناین',`a = ${a}, r = ${r}, n = ${n}`,`رێز: ${terms.join(' + ')}${n>5?' + ...':''}`);
+  html+=step(3,'حساب',`Sₙ = ${a} × (${r}^${n} - 1) / (${r} - 1) = ${a} × ${(Math.pow(r,n)-1).toFixed(4)} / ${r-1}`,`Sₙ = ${+s.toFixed(6)}`);
+  html+=answer(`S(${n})`,+s.toFixed(6));
+  showResult('result-series',html);
+}
+
+function calcGPInf(){
+  const a=Number(document.getElementById('sGinfA').value);
+  const r=Number(document.getElementById('sGinfR').value);
+  if(Math.abs(r)>=1){showResult('result-series',errBox('بۆ کۆی بێدواداچوون، پێویستە |r| < 1 بێت!'));return;}
+  const s=a/(1-r);
+  let html=`<div class="result-title">∞ کۆی GP بێدواداچوون</div>`;
+  html+=step(1,'پێشمەرج','پێویستە |r| < 1 بێت تا کۆ هەبێت',`r = ${r}, |r| = ${Math.abs(r)} < 1 ✅`);
+  html+=step(2,'فۆرموولا','S∞ = a / (1-r)',`S∞ = ${a} / (1 - ${r}) = ${a} / ${1-r}`);
+  html+=step(3,'دەرئەنجام','کۆی گشت تەرمەکان:',`S∞ = ${s}`);
+  html+=answer('S∞',s);
+  showResult('result-series',html);
+}
+
+function calcCustomSeries(){
+  const f=document.getElementById('sCustF').value;
+  const from=Number(document.getElementById('sCustFrom').value);
+  const to=Number(document.getElementById('sCustTo').value);
+  if(to-from>200){showResult('result-series',errBox('زیاتر لە 200 تەرم بەکاربەرە'));return;}
+  let sum=0;
+  const terms=[];
+  for(let n=from;n<=to;n++){
+    try{const v=eval(f.replace(/\^/g,'**').replace(/n/g,String(n)));sum+=v;terms.push({n,v});}
+    catch(e){showResult('result-series',errBox('فۆرموولاکە هەڵەیە'));return;}
+  }
+  let html=`<div class="result-title">Σ کۆی دیاریکراو</div>`;
+  html+=step(1,'هاوکێشە',`Σ f(n) لە n=${from} تا n=${to}`,`f(n) = ${f}`);
+  const preview=terms.slice(0,5).map(t=>`f(${t.n})=${+t.v.toFixed(4)}`).join(', ');
+  html+=step(2,'چند تەرمی یەکەم',preview+(terms.length>5?', ...'  :''),'');
+  html+=step(3,'کۆکردن',`${terms.length} تەرم کۆبکرانەوە`,`Σ = ${+sum.toFixed(8)}`);
+  html+=answer(`Σ f(n) لە ${from} تا ${to}`,+sum.toFixed(8));
+  showResult('result-series',html);
+}
+
+// ========================================
+// GRAPH THEORY
+// ========================================
+function analyzeGraph(){
+  const edgeStr=document.getElementById('graphEdges').value;
+  const directed=document.querySelector('input[name="graphDir"]:checked').value==='directed';
+  const edges=[];
+  const nodes=new Set();
+  edgeStr.split('\n').forEach(line=>{
+    line=line.trim();
+    if(!line) return;
+    const parts=line.split('-');
+    if(parts.length>=2){
+      const a=parts[0].trim().toUpperCase();
+      const bw=parts[1].split(':');
+      const b=bw[0].trim().toUpperCase();
+      const w=bw[1]?Number(bw[1]):1;
+      if(a&&b){edges.push({a,b,w});nodes.add(a);nodes.add(b);}
+    }
+  });
+  if(edges.length===0){showResult('result-graph',errBox('تکایە کناڕەکان داخڵ بکە'));return;}
+  const nodeArr=[...nodes].sort();
+  const deg={};
+  nodeArr.forEach(n=>deg[n]=0);
+  edges.forEach(e=>{
+    deg[e.a]=(deg[e.a]||0)+1;
+    if(!directed) deg[e.b]=(deg[e.b]||0)+1;
+    else deg[e.b]=(deg[e.b]||0);
+  });
+  const maxDeg=Math.max(...Object.values(deg));
+  const minDeg=Math.min(...Object.values(deg));
+  const sumDeg=Object.values(deg).reduce((a,b)=>a+b,0);
+  const isRegular=maxDeg===minDeg;
+  // Adjacency matrix
+  const idx={};
+  nodeArr.forEach((n,i)=>idx[n]=i);
+  const mat=nodeArr.map(()=>nodeArr.map(()=>0));
+  edges.forEach(e=>{mat[idx[e.a]][idx[e.b]]=e.w;if(!directed)mat[idx[e.b]][idx[e.a]]=e.w;});
+  let html=`<div class="result-title">🕸️ شیکردنەوەی گراف</div>`;
+  html+=step(1,'کڕکۆلەکان (Nodes)',`کڕکۆلەکان: {${nodeArr.join(', ')}}`,`V = ${nodeArr.length} کڕکۆل`);
+  html+=step(2,'کناڕەکان (Edges)',`${edges.length} کناڕە`,`E = ${edges.length} — گراف: ${directed?'Directed':'Undirected'}`);
+  html+=step(3,'درجەکان (Degrees)',nodeArr.map(n=>`deg(${n}) = ${deg[n]}`).join(' | '),`کۆی درجەکان = ${sumDeg} | Handshake Lemma: 2|E| = ${2*edges.length}`);
+  html+=step(4,'تایبەتمەندییەکان',
+    `${isRegular?'✅ گرافی ڕێکخراوە (Regular)':'❌ گرافی ڕێکخراو نییە'}
+${nodeArr.length-1===edges.length&&!directed?'🌲 دەتوانێت دار (Tree) بێت (|V|-1 کناڕە)':''}
+${maxDeg}  = Max Degree | ${minDeg} = Min Degree`,
+    `|V| = ${nodeArr.length}, |E| = ${edges.length}`
+  );
+  // Adjacency matrix table
+  let matHtml=`<div style="margin-top:12px; overflow-x:auto;"><table><tr><th></th>${nodeArr.map(n=>`<th>${n}</th>`).join('')}</tr>`;
+  nodeArr.forEach((n,i)=>{
+    matHtml+=`<tr><th>${n}</th>${mat[i].map(v=>`<td>${v}</td>`).join('')}</tr>`;
+  });
+  matHtml+=`</table></div>`;
+  document.getElementById('graph-info').innerHTML=html+`<br><div style="color:var(--accent); font-weight:700; font-size:13px; margin-bottom:8px;">📋 ماتریکسی نزیکبوون — Adjacency Matrix</div>`+matHtml;
+  document.getElementById('result-graph').classList.add('show');
+  // Draw graph
+  setTimeout(()=>drawGraph(nodeArr, edges, directed),100);
+}
+
+function drawGraph(nodes, edges, directed){
+  const canvas=document.getElementById('graphCanvas');
+  const ctx=canvas.getContext('2d');
+  const w=canvas.width, h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#0f1220'; ctx.fillRect(0,0,w,h);
+  const n=nodes.length;
+  const cx=w/2, cy=h/2, r=Math.min(w,h)*0.35;
+  const pos={};
+  nodes.forEach((node,i)=>{
+    const angle=(2*Math.PI*i/n)-Math.PI/2;
+    pos[node]={x:cx+r*Math.cos(angle), y:cy+r*Math.sin(angle)};
+  });
+  // Draw edges
+  edges.forEach(e=>{
+    const p1=pos[e.a], p2=pos[e.b];
+    if(!p1||!p2) return;
+    ctx.beginPath();
+    ctx.strokeStyle='rgba(79,142,247,0.6)';
+    ctx.lineWidth=2;
+    ctx.moveTo(p1.x,p1.y);
+    ctx.lineTo(p2.x,p2.y);
+    ctx.stroke();
+    if(directed){
+      const ang=Math.atan2(p2.y-p1.y, p2.x-p1.x);
+      const ar=14;
+      ctx.beginPath();
+      ctx.fillStyle='rgba(79,142,247,0.8)';
+      const tx=p2.x-20*Math.cos(ang), ty=p2.y-20*Math.sin(ang);
+      ctx.moveTo(tx,ty);
+      ctx.lineTo(tx-ar*Math.cos(ang-0.4),ty-ar*Math.sin(ang-0.4));
+      ctx.lineTo(tx-ar*Math.cos(ang+0.4),ty-ar*Math.sin(ang+0.4));
+      ctx.closePath(); ctx.fill();
+    }
+    // Weight label
+    if(e.w!==1){
+      const mx=(p1.x+p2.x)/2, my=(p1.y+p2.y)/2;
+      ctx.fillStyle='#ffd166'; ctx.font='12px JetBrains Mono';
+      ctx.fillText(e.w,mx,my);
+    }
+  });
+  // Draw nodes
+  nodes.forEach(node=>{
+    const {x,y}=pos[node];
+    ctx.beginPath();
+    const grad=ctx.createRadialGradient(x,y,0,x,y,22);
+    grad.addColorStop(0,'rgba(79,142,247,0.9)');
+    grad.addColorStop(1,'rgba(124,92,252,0.7)');
+    ctx.fillStyle=grad;
+    ctx.arc(x,y,22,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=2; ctx.stroke();
+    ctx.fillStyle='#fff'; ctx.font='bold 14px Tajawal'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(node,x,y);
+  });
+}
+
+// ========================================
+// COUNTING
+// ========================================
+function switchCountTab(name,btn){
+  ['perm','comb','fact','pig','incexc'].forEach(t=>document.getElementById('count-'+t).style.display='none');
+  document.getElementById('count-'+name).style.display='block';
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function factorial(n){
+  if(n<0) return NaN;
+  if(n===0||n===1) return 1;
+  let r=1; for(let i=2;i<=n;i++) r*=i; return r;
+}
+
+function calcPerm(){
+  const n=Number(document.getElementById('permN').value);
+  const r=Number(document.getElementById('permR').value);
+  if(n<0||r<0||r>n){showResult('result-counting',errBox('پێویستە n ≥ r ≥ 0 بێت'));return;}
+  const res=factorial(n)/factorial(n-r);
+  let html=`<div class="result-title">🎲 ئەنجامی Permutation</div>`;
+  html+=step(1,'پێناسە','Permutation: رێکخستنی r ئەلەمەنت لە n — ڕیز گرنگە',`P(n,r) = n! / (n-r)!`);
+  html+=step(2,'داناین',`n = ${n}, r = ${r}`,`P(${n},${r}) = ${n}! / (${n}-${r})! = ${n}! / ${n-r}!`);
+  html+=step(3,'حساب',`${n}! = ${factorial(n).toLocaleString()}\n${n-r}! = ${factorial(n-r).toLocaleString()}`,`P(${n},${r}) = ${factorial(n).toLocaleString()} / ${factorial(n-r).toLocaleString()}`);
+  html+=answer(`P(${n},${r})`,res.toLocaleString());
+  showResult('result-counting',html);
+}
+
+function calcComb(){
+  const n=Number(document.getElementById('combN').value);
+  const r=Number(document.getElementById('combR').value);
+  if(n<0||r<0||r>n){showResult('result-counting',errBox('پێویستە n ≥ r ≥ 0 بێت'));return;}
+  const res=factorial(n)/(factorial(r)*factorial(n-r));
+  let html=`<div class="result-title">🎲 ئەنجامی Combination</div>`;
+  html+=step(1,'پێناسە','Combination: هەڵبژاردنی r ئەلەمەنت لە n — ڕیز گرنگە نییە',`C(n,r) = n! / (r! × (n-r)!)`);
+  html+=step(2,'داناین',`n = ${n}, r = ${r}`,`C(${n},${r}) = ${n}! / (${r}! × ${n-r}!)`);
+  html+=step(3,'حساب',`${n}! = ${factorial(n).toLocaleString()}\n${r}! = ${factorial(r).toLocaleString()}\n${n-r}! = ${factorial(n-r).toLocaleString()}`,`C(${n},${r}) = ${factorial(n).toLocaleString()} / (${factorial(r).toLocaleString()} × ${factorial(n-r).toLocaleString()})`);
+  html+=answer(`C(${n},${r})`,res.toLocaleString());
+  showResult('result-counting',html);
+}
+
+function calcFactorial(){
+  const n=Number(document.getElementById('factN').value);
+  if(n<0||n>20){showResult('result-counting',errBox('n دەبێت لە 0 تا 20 بێت'));return;}
+  const steps=[];
+  let r=1;
+  for(let i=2;i<=n;i++){r*=i;steps.push(`× ${i} = ${r}`);}
+  let html=`<div class="result-title">! ئەنجامی Factorial</div>`;
+  html+=step(1,'پێناسە',`n! = n × (n-1) × (n-2) × ... × 1, بۆ n = ${n}`,`${n}! = ${Array.from({length:n},(v,k)=>n-k).join(' × ')}`);
+  html+=step(2,'قەدەمەبەقەدەم','دەستپێکردن لە 1:',`1 ${steps.join(' ')}`);
+  html+=answer(`${n}!`,factorial(n).toLocaleString());
+  showResult('result-counting',html);
+}
+
+function calcPigeonhole(){
+  const obj=Number(document.getElementById('pigObj').value);
+  const box=Number(document.getElementById('pigBox').value);
+  if(obj<1||box<1){showResult('result-counting',errBox('هەر دوو نرخ دەبێت ئەرێنی بێت'));return;}
+  const minGuarantee=Math.ceil(obj/box);
+  const isGuaranteed=obj>box;
+  let html=`<div class="result-title">🐦 ئەنجامی Pigeonhole</div>`;
+  html+=step(1,'پێناسە','Pigeonhole Principle: ئەگەر n بابەت لە k قوتووچەدا بنرێن و n > k بێت، دەبێت لانیکەم یەک قوتووچە بیستر لە یەک بابەتی تێدا بێت.',`n = ${obj} بابەت, k = ${box} قوتووچە`);
+  html+=step(2,'بەراوردکردن',`${obj} ${isGuaranteed?'>':'≤'} ${box}`,isGuaranteed?'n > k ✅ — Pigeonhole دەئەنجامدرێت':'n ≤ k — پێشبینی نادرێت');
+  html+=step(3,'دەرئەنجام',`لانیکەم یەک قوتووچە هەیە کە ⌈${obj}/${box}⌉ = ${minGuarantee} بابەتی تێدایە`,`⌈n/k⌉ = ⌈${obj}/${box}⌉ = ${minGuarantee}`);
+  html+=answer('Pigeonhole',isGuaranteed?`✅ لانیکەم یەک قوتووچە ${minGuarantee} بابەتی تێدایە`:'❌ مرووڤ نادرێت');
+  showResult('result-counting',html);
+}
+
+function calcIncExc(){
+  const a=Number(document.getElementById('ieA').value);
+  const b=Number(document.getElementById('ieB').value);
+  const ab=Number(document.getElementById('ieAB').value);
+  const res=a+b-ab;
+  let html=`<div class="result-title">🔀 ئەنجامی Inclusion-Exclusion</div>`;
+  html+=step(1,'پێناسە','Inclusion-Exclusion Principle: بۆ دوو کۆمەڵە',`|A ∪ B| = |A| + |B| - |A ∩ B|`);
+  html+=step(2,'داناین',`|A| = ${a}, |B| = ${b}, |A ∩ B| = ${ab}`,`|A ∪ B| = ${a} + ${b} - ${ab}`);
+  html+=step(3,'حساب',`= ${a+b} - ${ab}`,`|A ∪ B| = ${res}`);
+  html+=answer('|A ∪ B|',res);
+  showResult('result-counting',html);
+}
+
+// ========================================
+// BINARY
+// ========================================
+function switchBinTab(name,btn){
+  ['d2b','b2d','badd','bsub','multi'].forEach(t=>document.getElementById('bin-'+t).style.display='none');
+  document.getElementById('bin-'+name).style.display='block';
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function calcDecToBin(){
+  const dec=parseInt(document.getElementById('decToBin').value);
+  if(isNaN(dec)||dec<0){showResult('result-binary',errBox('تکایە ژمارەی ئەرێنیی دیسمال داخڵ بکە'));return;}
+  const steps=[];
+  let n=dec;
+  while(n>0){
+    steps.push({n, q:Math.floor(n/2), r:n%2});
+    n=Math.floor(n/2);
+  }
+  const bin=dec.toString(2);
+  let html=`<div class="result-title">💻 دیسمال بۆ باینری</div>`;
+  html+=step(1,'ڕووکە','دابەشکردن لەسەر 2 بەردەوام تا گەیشتین بە 0، ئەنجام بخوێنەوە لە خوارەوە بۆ سەرەوە',`${dec} → باینری`);
+  let table=`<table><tr><th>n</th><th>n ÷ 2</th><th>ئەنجامی کۆتایی (Remainder)</th></tr>`;
+  steps.forEach(s=>table+=`<tr><td>${s.n}</td><td>${s.q}</td><td class="${s.r===1?'highlight':'highlight-blue'}">${s.r}</td></tr>`);
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  html+=step(2,'خوێندنەوە','ئەنجامەکان لە خوارەوە بۆ سەرەوە بخوێنەوە:',`${dec}₁₀ = ${bin}₂`);
+  html+=answer(`${dec} بە باینری`,`${bin}₂`);
+  showResult('result-binary',html);
+}
+
+function calcBinToDec(){
+  const bin=document.getElementById('binToDec').value.trim();
+  if(!/^[01]+$/.test(bin)){showResult('result-binary',errBox('تەنها 0 و 1 داخڵ بکە'));return;}
+  const steps=[];
+  let sum=0;
+  const reversed=[...bin].reverse();
+  reversed.forEach((bit,i)=>{
+    const val=Number(bit)*Math.pow(2,i);
+    steps.push({bit,i,val});
+    sum+=val;
+  });
+  let html=`<div class="result-title">💻 باینری بۆ دیسمال</div>`;
+  html+=step(1,'ڕووکە','هەر بیتێک لەگەڵ 2 بە هێزی شوێنەکەی زیادبکە (لە ڕاست بۆ چەپ دەستپێبکە)',`${bin}₂ → دیسمال`);
+  let table=`<table><tr><th>بیت</th><th>شوێن</th><th>هێز</th><th>نرخ</th></tr>`;
+  [...steps].reverse().forEach(s=>table+=`<tr><td class="${s.bit==='1'?'highlight':'highlight-blue'}">${s.bit}</td><td>${s.i}</td><td>2^${s.i}</td><td>${s.val}</td></tr>`);
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  html+=step(2,'کۆکردن',steps.filter(s=>s.val>0).map(s=>`${s.val}`).join(' + '),`= ${sum}`);
+  html+=answer(`${bin}₂ بە دیسمال`,`${sum}₁₀`);
+  showResult('result-binary',html);
+}
+
+function calcBinAdd(){
+  const b1=document.getElementById('binAdd1').value.trim();
+  const b2=document.getElementById('binAdd2').value.trim();
+  if(!/^[01]+$/.test(b1)||!/^[01]+$/.test(b2)){showResult('result-binary',errBox('تەنها 0 و 1 داخڵ بکە'));return;}
+  const d1=parseInt(b1,2), d2=parseInt(b2,2);
+  const res=d1+d2;
+  const resBin=res.toString(2);
+  // Step by step binary addition
+  const len=Math.max(b1.length,b2.length)+1;
+  const a=b1.padStart(len,'0').split('').reverse();
+  const b=b2.padStart(len,'0').split('').reverse();
+  const steps=[];let carry=0;
+  const result=[];
+  for(let i=0;i<len;i++){
+    const av=Number(a[i]||0), bv=Number(b[i]||0);
+    const s=av+bv+carry;
+    result.push(s%2);
+    const nc=Math.floor(s/2);
+    steps.push({i,av,bv,carry,sum:s,bit:s%2,newCarry:nc});
+    carry=nc;
+  }
+  const resBinCalc=result.reverse().join('').replace(/^0+/,'')||'0';
+  let html=`<div class="result-title">➕ زیادکردنی باینری</div>`;
+  html+=step(1,'ناسینەوە',`${b1}₂ + ${b2}₂`,`دیسمال: ${d1} + ${d2} = ${res}`);
+  let table=`<table><tr><th>شوێن</th><th>بیتی A</th><th>بیتی B</th><th>Carry</th><th>کۆ</th><th>بیتی ئەنجام</th><th>Carry نوێ</th></tr>`;
+  steps.forEach(s=>table+=`<tr><td>${s.i}</td><td>${s.av}</td><td>${s.bv}</td><td>${s.carry}</td><td>${s.sum}</td><td class="highlight">${s.bit}</td><td class="highlight-blue">${s.newCarry}</td></tr>`);
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  html+=step(2,'ئەنجام','باینری خوێندنەوە لەسەرەوە:',`${b1}₂ + ${b2}₂ = ${resBinCalc}₂ = ${res}₁₀`);
+  html+=answer('زیادکردن',`${b1} + ${b2} = ${resBinCalc}₂ (${res}₁₀)`);
+  showResult('result-binary',html);
+}
+
+function calcBinSub(){
+  const b1=document.getElementById('binSub1').value.trim();
+  const b2=document.getElementById('binSub2').value.trim();
+  if(!/^[01]+$/.test(b1)||!/^[01]+$/.test(b2)){showResult('result-binary',errBox('تەنها 0 و 1 داخڵ بکە'));return;}
+  const d1=parseInt(b1,2), d2=parseInt(b2,2);
+  if(d1<d2){showResult('result-binary',errBox('ژمارەی یەکەم دەبێت گەورەتر بێت'));return;}
+  const res=d1-d2;
+  const resBin=res.toString(2);
+  const twos_comp=((~d2+1)>>>0).toString(2).slice(-(b1.length+1));
+  let html=`<div class="result-title">➖ کەمکردنی باینری</div>`;
+  html+=step(1,'ناسینەوە',`${b1}₂ - ${b2}₂`,`دیسمال: ${d1} - ${d2} = ${res}`);
+  html+=step(2,'ڕووکەی 2\'s Complement','کەمکردن بە شێوازی 2\'s Complement:',`2's Complement ی ${b2} = ${twos_comp}`);
+  html+=step(3,'زیادکردن',`${b1} + ${twos_comp}`,`ئەنجام: ${resBin}₂`);
+  html+=step(4,'سەرتایی','ئەگەر Carry هەبوو لەگەڵ بیتی یەکەم، بیتی Carry بخۆ و ئەنجامەکە دەرئەنجامی ئەرێنییە',`${b1}₂ - ${b2}₂ = ${resBin}₂ = ${res}₁₀`);
+  html+=answer('کەمکردن',`${b1} - ${b2} = ${resBin}₂ (${res}₁₀)`);
+  showResult('result-binary',html);
+}
+
+function calcMultiBase(){
+  const numStr=document.getElementById('multiNum').value.trim();
+  const fromBase=Number(document.getElementById('multiFrom').value);
+  if(fromBase<2||fromBase>36){showResult('result-binary',errBox('بنەما دەبێت لە 2 تا 36 بێت'));return;}
+  const dec=parseInt(numStr,fromBase);
+  if(isNaN(dec)){showResult('result-binary',errBox('ژمارە بۆ ئەو بنەمایە دروست نییە'));return;}
+  let html=`<div class="result-title">🔢 گۆڕینی بنەمایی</div>`;
+  html+=step(1,'ناسینەوە',`${numStr} بە بنەمای ${fromBase}`,`بنەمای 10: ${dec}`);
+  const bases=[{b:2,n:'باینری'},{b:8,n:'ئۆکتاڵ'},{b:10,n:'دیسمال'},{b:16,n:'هێکسادیسمال'}];
+  let table=`<table><tr><th>بنەما</th><th>ناو</th><th>نرخ</th></tr>`;
+  bases.forEach(({b,n})=>table+=`<tr><td>${b}</td><td>${n}</td><td class="highlight mono">${dec.toString(b).toUpperCase()}</td></tr>`);
+  table+=`</table>`;
+  html+=`<div style="overflow-x:auto;">${table}</div>`;
+  html+=answer(`${numStr} (بنەمای ${fromBase})`,`دیسمال: ${dec} | باینری: ${dec.toString(2)} | هێکسادیسمال: ${dec.toString(16).toUpperCase()}`);
+  showResult('result-binary',html);
+}
+
+</script>
+</body>
+</html>
